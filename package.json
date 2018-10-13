@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "codemirror": "^5.40.2",
     "vue": "^2.5.17"
   },
   "devDependencies": {
