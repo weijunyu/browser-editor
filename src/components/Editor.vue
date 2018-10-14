@@ -1,7 +1,7 @@
 <template>
   <div>
     <form>
-    <textarea id='editor'></textarea>
+      <textarea v-bind:id="editorId"></textarea>  
     </form>
   </div>
 </template>
@@ -16,35 +16,29 @@ import "codemirror/addon/selection/active-line"; // For active line styling
 
 export default {
   name: "editor",
+  props: [
+    'codeMirrorOptions',
+    'editorId',
+    'initialValue'
+  ],
   data: function() {
     return {
-      showCm: false
     };
   },
   methods: {},
   mounted() {
-    let cmOptions = {
-      lineNumbers: true,
-      autoCloseBrackets: true,
-      styleActiveLine: true
-    };
-    this.cm = CodeMirror.fromTextArea(
-      document.getElementById("editor"),
+    let cmOptions = this.codeMirrorOptions;
+    this.cmEditor = CodeMirror.fromTextArea(
+      document.getElementById(this.editorId),
       cmOptions
     );
-    let configDisplayed = sortObject(Object.assign({}, CodeMirror.defaults));
-    this.cm.setValue(JSON.stringify(configDisplayed, null, 2));
+    
+    if (this.initialValue) {
+      this.cmEditor.setValue(this.initialValue);
+    } 
   }
 };
 
-function sortObject(obj) {
-  let sortedObj = {};
-  let sortedKeys = Object.keys(obj).sort();
-  for (let key of sortedKeys) {
-    sortedObj[key] = obj[key];
-  }
-  return sortedObj;
-}
 </script>
 
 <style>
