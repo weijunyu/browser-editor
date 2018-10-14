@@ -40,4 +40,7 @@ export default {
 .CodeMirror {
   border: 1px solid #333333;
 }
+#editor-main-element {
+  height: auto;
+}
 </style>
