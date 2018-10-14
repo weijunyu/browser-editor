@@ -16,34 +16,28 @@ import "codemirror/addon/selection/active-line"; // For active line styling
 
 export default {
   name: "editor",
-  props: [
-    'codeMirrorOptions',
-    'editorId',
-    'initialValue'
-  ],
+  props: ["codeMirrorOptions", "editorId", "initialValue"],
   data: function() {
-    return {
-    };
+    return {};
   },
   methods: {},
   mounted() {
-    let cmOptions = this.codeMirrorOptions;
     this.cmEditor = CodeMirror.fromTextArea(
       document.getElementById(this.editorId),
-      cmOptions
+      this.codeMirrorOptions
     );
-    
     if (this.initialValue) {
       this.cmEditor.setValue(this.initialValue);
-    } 
+    }
+    // update id attribute of DOM node for actual editor
+    let cmEditorElement = this.cmEditor.getWrapperElement();
+    cmEditorElement.id = `${this.editorId}-element`;
   }
 };
-
 </script>
 
 <style>
 .CodeMirror {
   border: 1px solid #333333;
-  height: auto;
 }
 </style>

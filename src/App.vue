@@ -1,9 +1,31 @@
 <template>
-  <div id="app">
-    <button type="button" v-on:click="showSettings = !showSettings">View settings</button>
-    <Editor v-if="showSettings" editorId="editor-settings" v-bind:initialValue="getInitialCmSettings()"></Editor>
-    <h1>Code Editor</h1>
-    <Editor v-bind:codeMirrorOptions="codeMirrorDefaultOptions" editorId="editor-main"></Editor>
+  <div id="app" class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-primary"
+          v-on:click="showDefaultSettings = !showDefaultSettings"
+        >View settings</button>
+      </div>
+    </div>
+    <div class="row" v-if="showDefaultSettings">
+      <div class="col-6">
+        <h2>Default settings</h2>
+        <Editor
+          v-if="showDefaultSettings"
+          editorId="editor-default-settings"
+          v-bind:initialValue="getDefaultSettingsString()"
+          v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
+        ></Editor>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2>Code Editor</h2>
+        <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,27 +36,33 @@ export default {
   name: "app",
   data: function() {
     return {
-      showSettings: false,
-      codeMirrorDefaultOptions: {
+      showDefaultSettings: false,
+      cmOptionsDefaultSettings: {
+        mode: {
+          name: "javascript",
+          json: true
+        },
         lineNumbers: true,
-        autoCloseBrackets: true,
+        styleActiveLine: true,
+        readOnly: true
+      },
+      cmOptionsMainEditor: {
+        mode: "",
+        lineNumbers: true,
         styleActiveLine: true
       }
     };
   },
   methods: {
-    getInitialCmSettings() {
-      return JSON.stringify(
-        sortObject(
-          Object.assign({}, CodeMirror.defaults, this.codeMirrorDefaultOptions)
-        ), null, 2
-      );
+    getDefaultSettingsString() {
+      return JSON.stringify(sortObject(CodeMirror.defaults), null, 2);
     }
   },
   components: {
     Editor
   }
 };
+
 function sortObject(obj) {
   let sortedObj = {};
   let sortedKeys = Object.keys(obj).sort();
