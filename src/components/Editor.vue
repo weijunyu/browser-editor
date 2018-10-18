@@ -1,7 +1,7 @@
 <template>
   <div>
     <form>
-      <textarea v-bind:id="editorId"></textarea>  
+      <textarea v-bind:id="editorId"></textarea>
     </form>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     if (this.initialValue) {
       this.cmEditor.setValue(this.initialValue);
     }
-    // update id attribute of DOM node for actual editor
+    // update id attribute of CodeMirror div node for actual editor
     let cmEditorElement = this.cmEditor.getWrapperElement();
     cmEditorElement.id = `${this.editorId}-element`;
   }
@@ -39,8 +39,5 @@ export default {
 <style>
 .CodeMirror {
   border: 1px solid #333333;
-}
-#editor-main-element {
-  height: auto;
 }
 </style>
