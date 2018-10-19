@@ -43,12 +43,16 @@ export default {
     }
 
     if (this.editorId === "editor-main") {
-      EventBus.$on('new-settings-available', newSettings => {
-        let settings = JSON.parse(newSettings);
+      EventBus.$on("new-settings-available", newSettings => {
+        let settings = Object.assign(
+          {},
+          CodeMirror.defaults,
+          JSON.parse(newSettings)
+        );
         for (let settingName of Object.keys(settings)) {
           this.cmEditor.setOption(settingName, settings[settingName]);
         }
-      })
+      });
     }
   }
 };

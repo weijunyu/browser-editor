@@ -47,7 +47,7 @@
 <script>
 import CodeMirror from "codemirror";
 import Editor from "./components/Editor.vue";
-import EventBus from './EventBus';
+import EventBus from "./EventBus";
 
 let cmOptionsEditorDefault = {
   mode: "",
@@ -87,7 +87,7 @@ export default {
       return JSON.stringify(this.cmOptionsEditorDefault, null, 2);
     },
     applySettings() {
-      EventBus.$emit('apply-settings');
+      EventBus.$emit("apply-settings");
     }
   },
   components: {
