@@ -21,11 +21,7 @@
               <div class="col-6">
                 <div class="justified">
                   <h2>Current settings</h2>
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    @click="$emit('apply-settings')"
-                  >Apply</button>
+                  <button type="button" class="btn btn-primary" @click="applySettings">Apply</button>
                 </div>
                 <Editor
                   editorId="editor-current-settings"
@@ -51,6 +47,7 @@
 <script>
 import CodeMirror from "codemirror";
 import Editor from "./components/Editor.vue";
+import EventBus from './EventBus';
 
 let cmOptionsEditorDefault = {
   mode: "",
@@ -88,6 +85,9 @@ export default {
     },
     getMainEditorDefaultSettings() {
       return JSON.stringify(this.cmOptionsEditorDefault, null, 2);
+    },
+    applySettings() {
+      EventBus.$emit('apply-settings');
     }
   },
   components: {
