@@ -2,33 +2,31 @@
   <div id="app">
     <div class="container-fluid">
       <div class="card">
-        <div class="card-header">
-          <a class="btn btn-link" data-toggle="collapse" href="#editor-settings-container">
+        <div class="card-header centered">
+          <button class="btn btn-link" type="button" @click="showSettings = !showSettings">
             <h3>View settings</h3>
-          </a>
+          </button>
         </div>
-        <div class="collapse show" id="editor-settings-container">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-6">
-                <h2>Default settings</h2>
-                <Editor
-                  editorId="editor-default-settings"
-                  v-bind:initialValue="getDefaultSettingsString()"
-                  v-bind:codeMirrorOptions="cmOptionsSettingsDefault"
-                ></Editor>
+        <div class="card-body" v-if="showSettings">
+          <div class="row">
+            <div class="col-6">
+              <h2>Default settings</h2>
+              <Editor
+                editorId="editor-default-settings"
+                v-bind:initialValue="getDefaultSettingsString()"
+                v-bind:codeMirrorOptions="cmOptionsSettingsDefault"
+              ></Editor>
+            </div>
+            <div class="col-6">
+              <div class="justified">
+                <h2>Current settings</h2>
+                <button type="button" class="btn btn-primary" @click="applySettings">Apply</button>
               </div>
-              <div class="col-6">
-                <div class="justified">
-                  <h2>Current settings</h2>
-                  <button type="button" class="btn btn-primary" @click="applySettings">Apply</button>
-                </div>
-                <Editor
-                  editorId="editor-current-settings"
-                  v-bind:initialValue="getMainEditorDefaultSettings()"
-                  v-bind:codeMirrorOptions="cmOptionsSettingsCurrent"
-                ></Editor>
-              </div>
+              <Editor
+                editorId="editor-current-settings"
+                v-bind:initialValue="getMainEditorDefaultSettings()"
+                v-bind:codeMirrorOptions="cmOptionsSettingsCurrent"
+              ></Editor>
             </div>
           </div>
         </div>
@@ -76,7 +74,8 @@ export default {
     return {
       cmOptionsEditorDefault,
       cmOptionsSettingsDefault,
-      cmOptionsSettingsCurrent
+      cmOptionsSettingsCurrent,
+      showSettings: false
     };
   },
   methods: {
@@ -111,6 +110,9 @@ function sortObject(obj) {
 }
 #editor-main-element {
   height: auto;
+}
+.centered {
+  text-align: center;
 }
 .justified {
   display: flex;
