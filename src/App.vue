@@ -14,18 +14,16 @@
               <Editor
                 editorId="editor-default-settings"
                 v-bind:initialValue="getDefaultSettingsString()"
-                v-bind:codeMirrorOptions="cmOptionsSettingsDefault"
+                v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
               ></Editor>
             </div>
             <div class="col-6">
-              <div class="justified">
-                <h2>Current settings</h2>
-                <button type="button" class="btn btn-primary" @click="applySettings">Apply</button>
-              </div>
+              <h2 style="display:inline-block">Current settings&nbsp;</h2>
+              <i v-if="currentSettingsInvalid" class="fas fa-times-circle" style="color:darkred"></i>
               <Editor
                 editorId="editor-current-settings"
-                v-bind:initialValue="getMainEditorDefaultSettings()"
-                v-bind:codeMirrorOptions="cmOptionsSettingsCurrent"
+                v-bind:initialValue="getMainEditorDefaultSettingsString()"
+                v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
               ></Editor>
             </div>
           </div>
@@ -35,7 +33,7 @@
       <div class="row">
         <div class="col">
           <h2>Code Editor</h2>
-          <Editor v-bind:codeMirrorOptions="cmOptionsEditorDefault" editorId="editor-main"></Editor>
+          <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
         </div>
       </div>
     </div>
@@ -45,45 +43,65 @@
 <script>
 import CodeMirror from "codemirror";
 import Editor from "./components/Editor.vue";
-import EventBus from "./EventBus";
+import { EventBus, sortObject } from "./utils";
 
-let cmOptionsEditorDefault = {
+// Main Editor
+let cmOptionsMainEditor = {
   mode: "",
   lineNumbers: true,
-  styleActiveLine: true
+  styleActiveLine: true,
+  extraKeys: {
+    Tab: function(cm) {
+      let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+      cm.replaceSelection(spaces);
+    }
+  }
 };
 
-let cmOptionsSettingsDefault = Object.assign({}, cmOptionsEditorDefault, {
+// Default settings editor (read-only)
+let cmOptionsDefaultSettings = {
   mode: {
     name: "javascript",
     json: true
   },
+  lineNumbers: true,
+  styleActiveLine: true,
   readOnly: true
-});
+};
 
-let cmOptionsSettingsCurrent = Object.assign({}, cmOptionsEditorDefault, {
+// Current settings editor
+let cmOptionsCurrentSettings = {
   mode: {
     name: "javascript",
     json: true
+  },
+  lineNumbers: true,
+  styleActiveLine: true,
+  extraKeys: {
+    Tab: function(cm) {
+      let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+      cm.replaceSelection(spaces);
+    }
   }
-});
+};
 
 export default {
   name: "app",
   data: function() {
     return {
-      cmOptionsEditorDefault,
-      cmOptionsSettingsDefault,
-      cmOptionsSettingsCurrent,
-      showSettings: false
+      cmOptionsMainEditor,
+      cmOptionsDefaultSettings,
+      cmOptionsCurrentSettings,
+      showSettings: false,
+      currentSettingsInvalid: false
     };
   },
   methods: {
     getDefaultSettingsString() {
       return JSON.stringify(sortObject(CodeMirror.defaults), null, 2);
     },
-    getMainEditorDefaultSettings() {
-      return JSON.stringify(this.cmOptionsEditorDefault, null, 2);
+    getMainEditorDefaultSettingsString() {
+      return JSON.stringify(this.cmOptionsMainEditor, null, 2);
     },
     applySettings() {
       EventBus.$emit("apply-settings");
@@ -91,17 +109,17 @@ export default {
   },
   components: {
     Editor
+  },
+  created() {
+    // If current settings is valid JSON or not; fired from current-settings editor.
+    EventBus.$on("current-settings-invalid", () => {
+      this.currentSettingsInvalid = true;
+    });
+    EventBus.$on("new-settings-available", () => {
+      this.currentSettingsInvalid = false;
+    });
   }
 };
-
-function sortObject(obj) {
-  let sortedObj = {};
-  let sortedKeys = Object.keys(obj).sort();
-  for (let key of sortedKeys) {
-    sortedObj[key] = obj[key];
-  }
-  return sortedObj;
-}
 </script>
 
 <style>
@@ -109,7 +127,8 @@ function sortObject(obj) {
   font-family: sans-serif;
 }
 #editor-main-element {
-  height: auto;
+  /* make height equal window height */
+  height: 100vh;
 }
 .centered {
   text-align: center;

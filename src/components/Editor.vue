@@ -1,8 +1,6 @@
 <template>
   <div>
-    <form>
       <textarea v-bind:id="editorId"></textarea>
-    </form>
   </div>
 </template>
 
@@ -14,7 +12,7 @@ import "codemirror/mode/javascript/javascript"; // For javascript mode
 import "codemirror/addon/edit/closebrackets"; // For auto close brackets
 import "codemirror/addon/selection/active-line"; // For active line styling
 
-import EventBus from "../EventBus";
+import { EventBus, sortObject } from "../utils";
 
 export default {
   name: "editor",
@@ -35,23 +33,38 @@ export default {
     let cmEditorElement = this.cmEditor.getWrapperElement();
     cmEditorElement.id = `${this.editorId}-element`;
 
-    // If current settings editor, add listener for apply-settings button
+    // Initialization for current settings editor
     if (this.editorId === "editor-current-settings") {
-      EventBus.$on("apply-settings", () => {
-        EventBus.$emit("new-settings-available", this.cmEditor.getValue());
+      this.cmEditor.on("change", () => {
+        try {
+          let newSettings = JSON.parse(this.cmEditor.getValue());
+          EventBus.$emit("new-settings-available", newSettings);
+        } catch (error) {
+          EventBus.$emit("current-settings-invalid");
+        }
       });
     }
 
+    // Initialization for main editor
     if (this.editorId === "editor-main") {
+      this.cmEditor.setValue(JSON.stringify(this.cmEditor.options, null, 2))
+      this.cmEditor.setSize({
+        height: '1000px'
+      })
+      const SettingsOptions = Object.keys(CodeMirror.defaults);
       EventBus.$on("new-settings-available", newSettings => {
-        let settings = Object.assign(
-          {},
-          CodeMirror.defaults,
-          JSON.parse(newSettings)
-        );
-        for (let settingName of Object.keys(settings)) {
-          this.cmEditor.setOption(settingName, settings[settingName]);
-        }
+        try {
+          let finalSettings = Object.assign(
+            {},
+            CodeMirror.defaults,
+            newSettings
+          );
+          for (let key of Object.keys(finalSettings)) {
+            if (SettingsOptions.indexOf(key) !== -1) {
+              this.cmEditor.setOption(key, finalSettings[key]);
+            }
+          }
+        } catch (error) {}
       });
     }
   }
