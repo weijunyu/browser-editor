@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-bind:id="editorId + '-wrapper'">
       <textarea v-bind:id="editorId"></textarea>
   </div>
 </template>
@@ -73,6 +73,6 @@ export default {
 
 <style>
 .CodeMirror {
-  border: 1px solid #333333;
+  /* border: 1px solid #333333; */
 }
 </style>

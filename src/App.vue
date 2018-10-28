@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container-fluid">
+    <!-- <div class="container-fluid">
       <div class="card">
         <div class="card-header centered">
           <button class="btn btn-link" type="button" @click="showSettings = !showSettings">
@@ -36,7 +36,22 @@
           <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
         </div>
       </div>
-    </div>
+    </div>-->
+
+    <nav id="sidebar">
+      <ul>
+        <li>
+          <a href="#">Editor</a>
+        </li>
+        <li>
+          <a href="#">Options</a>
+        </li>
+        <li>
+          <a href="#">Themes</a>
+        </li>
+      </ul>
+    </nav>
+    <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
   </div>
 </template>
 
@@ -125,11 +140,54 @@ export default {
 <style>
 #app {
   font-family: sans-serif;
-}
-#editor-main-element {
   /* make height equal window height */
   height: 100vh;
 }
+
+#sidebar {
+  position: fixed;
+  height: 100%;
+  width: 250px;
+  background: #7386d5;
+  color: #ececec;
+  transition: all 0.3s;
+  font-family: sans-serif;
+  font-size: 1.2em;
+}
+
+#sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  display: block;
+  color: #ececec;
+}
+
+#sidebar ul li a:hover {
+  color: #7386d5;
+  background: #fff;
+}
+
+#sidebar ul li a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#editor-main-wrapper {
+  box-sizing: border-box;
+  height: 100%;
+  margin-left: 250px;
+}
+
+#editor-main-element {
+  height: 100%;
+}
+
 .centered {
   text-align: center;
 }
