@@ -39,6 +39,9 @@
     </div>-->
 
     <nav id="sidebar">
+      <div class="sidebar-header">
+        <h3>Browser Editor</h3>
+      </div>
       <ul>
         <li>
           <a href="#">Editor</a>
@@ -51,7 +54,9 @@
         </li>
       </ul>
     </nav>
-    <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+    <div id="content">
+      <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+    </div>
   </div>
 </template>
 
@@ -140,19 +145,26 @@ export default {
 <style>
 #app {
   font-family: sans-serif;
-  /* make height equal window height */
-  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 100vh;
 }
 
 #sidebar {
-  position: fixed;
-  height: 100%;
-  width: 250px;
-  background: #7386d5;
-  color: #ececec;
+  min-width: 250px;
+  max-width: 250px;
+  background: #5d576b;
+  color: #e6ebe0;
   transition: all 0.3s;
   font-family: sans-serif;
   font-size: 1.2em;
+}
+
+.sidebar-header {
+  padding: 20px;
+  background: #0e0f19;
+  color: #e6ebe0;
 }
 
 #sidebar ul {
@@ -164,27 +176,32 @@ export default {
 #sidebar ul li a {
   padding: 10px;
   display: block;
-  color: #ececec;
 }
 
 #sidebar ul li a:hover {
-  color: #7386d5;
-  background: #fff;
+  color: #5d576b;
+  background: #e6ebe0;
 }
 
-#sidebar ul li a, a:hover, a:focus {
-    color: inherit;
-    text-decoration: none;
-    transition: all 0.3s;
+#sidebar ul li a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
 }
 
-#editor-main-wrapper {
-  box-sizing: border-box;
-  height: 100%;
-  margin-left: 250px;
+#content {
+  flex: 1 1 auto;
+  position: relative;
 }
 
-#editor-main-element {
+.CodeMirror {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 100%;
 }
 
