@@ -39,15 +39,15 @@
     </div>-->
 
     <nav id="sidebar">
-      <div class="sidebar-header">
-        <h3>Browser Editor</h3>
-      </div>
       <ul>
         <li>
           <a href="#">Editor</a>
         </li>
         <li>
-          <a href="#">Options</a>
+          <a href="#" @click="showSettings = !showSettings">Options
+            <i class="fas fa-angle-right" v-if="!showSettings"></i>
+            <i class="fas fa-angle-left" v-if="showSettings"></i>
+          </a>
         </li>
         <li>
           <a href="#">Themes</a>
@@ -161,12 +161,6 @@ export default {
   font-size: 1.2em;
 }
 
-.sidebar-header {
-  padding: 20px;
-  background: #0e0f19;
-  color: #e6ebe0;
-}
-
 #sidebar ul {
   list-style-type: none;
   margin: 0;
@@ -175,7 +169,9 @@ export default {
 
 #sidebar ul li a {
   padding: 10px;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 #sidebar ul li a:hover {
