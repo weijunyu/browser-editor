@@ -44,7 +44,8 @@
           <a href="#">Editor</a>
         </li>
         <li>
-          <a href="#" @click="showSettings = !showSettings">Options
+          <a href="#" @click="showSettings = !showSettings">
+            Options
             <i class="fas fa-angle-right" v-if="!showSettings"></i>
             <i class="fas fa-angle-left" v-if="showSettings"></i>
           </a>
@@ -55,6 +56,16 @@
       </ul>
     </nav>
     <div id="content">
+      <Editor
+        editorId="editor-default-settings"
+        v-bind:initialValue="getDefaultSettingsString()"
+        v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
+      ></Editor>
+      <Editor
+        editorId="editor-current-settings"
+        v-bind:initialValue="getMainEditorDefaultSettingsString()"
+        v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
+      ></Editor>
       <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
     </div>
   </div>
@@ -188,6 +199,12 @@ a:focus {
 }
 
 #content {
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+}
+
+#content > div {
   flex: 1 1 auto;
   position: relative;
 }
