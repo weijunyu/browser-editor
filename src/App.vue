@@ -57,12 +57,16 @@
     </nav>
     <div id="content">
       <Editor
+        v-if="showSettings"
         editorId="editor-default-settings"
+        editorName="Default settings"
         v-bind:initialValue="getDefaultSettingsString()"
         v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
       ></Editor>
       <Editor
+        v-if="showSettings"
         editorId="editor-current-settings"
+        editorName="Current Settings"
         v-bind:initialValue="getMainEditorDefaultSettingsString()"
         v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
       ></Editor>
@@ -204,7 +208,7 @@ a:focus {
   display: flex;
 }
 
-#content > div {
+#content > .editor-wrapper {
   flex: 1 1 auto;
   position: relative;
 }
@@ -216,6 +220,10 @@ a:focus {
   left: 0;
   right: 0;
   height: 100%;
+}
+
+#editor-default-settings-wrapper > .CodeMirror, #editor-current-settings-wrapper > .CodeMirror {
+  top: 19px;
 }
 
 .centered {

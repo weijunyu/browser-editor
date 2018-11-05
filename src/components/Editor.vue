@@ -1,6 +1,7 @@
 <template>
-  <div v-bind:id="editorId + '-wrapper'">
-      <textarea v-bind:id="editorId"></textarea>
+  <div v-bind:id="editorId + '-wrapper'" class="editor-wrapper">
+    <p v-bind:id="editorId + '-name'" class="editor-name" v-if="editorName">{{editorName}}</p>
+    <textarea v-bind:id="editorId"></textarea>
   </div>
 </template>
 
@@ -16,7 +17,7 @@ import { EventBus, sortObject } from "../utils";
 
 export default {
   name: "editor",
-  props: ["codeMirrorOptions", "editorId", "initialValue"],
+  props: ["codeMirrorOptions", "editorId", "editorName", "initialValue"],
   data: function() {
     return {};
   },
@@ -47,10 +48,6 @@ export default {
 
     // Initialization for main editor
     if (this.editorId === "editor-main") {
-      this.cmEditor.setValue(JSON.stringify(this.cmEditor.options, null, 2))
-      this.cmEditor.setSize({
-        height: '1000px'
-      })
       const SettingsOptions = Object.keys(CodeMirror.defaults);
       EventBus.$on("new-settings-available", newSettings => {
         try {
@@ -72,7 +69,17 @@ export default {
 </script>
 
 <style>
-.CodeMirror {
-  /* border: 1px solid #333333; */
+.editor-name {
+  padding: 0 15px;
+  font-family: monospace;
+  margin: 0 0;
+}
+
+#editor-default-settings-name {
+  background-color: #987284
+}
+
+#editor-current-settings-name {
+  background-color: #9DBF9E
 }
 </style>
