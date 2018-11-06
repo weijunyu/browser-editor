@@ -1,6 +1,5 @@
 <template>
   <div v-bind:id="editorId + '-wrapper'" class="editor-wrapper">
-    <p v-bind:id="editorId + '-name'" class="editor-name" v-if="editorName">{{editorName}}</p>
     <textarea v-bind:id="editorId"></textarea>
   </div>
 </template>
@@ -69,17 +68,4 @@ export default {
 </script>
 
 <style>
-.editor-name {
-  padding: 0 15px;
-  font-family: monospace;
-  margin: 0 0;
-}
-
-#editor-default-settings-name {
-  background-color: #987284
-}
-
-#editor-current-settings-name {
-  background-color: #9DBF9E
-}
 </style>

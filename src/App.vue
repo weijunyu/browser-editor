@@ -1,43 +1,5 @@
 <template>
   <div id="app">
-    <!-- <div class="container-fluid">
-      <div class="card">
-        <div class="card-header centered">
-          <button class="btn btn-link" type="button" @click="showSettings = !showSettings">
-            <h3>View settings</h3>
-          </button>
-        </div>
-        <div class="card-body" v-if="showSettings">
-          <div class="row">
-            <div class="col-6">
-              <h2>Default settings</h2>
-              <Editor
-                editorId="editor-default-settings"
-                v-bind:initialValue="getDefaultSettingsString()"
-                v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
-              ></Editor>
-            </div>
-            <div class="col-6">
-              <h2 style="display:inline-block">Current settings&nbsp;</h2>
-              <i v-if="currentSettingsInvalid" class="fas fa-times-circle" style="color:darkred"></i>
-              <Editor
-                editorId="editor-current-settings"
-                v-bind:initialValue="getMainEditorDefaultSettingsString()"
-                v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
-              ></Editor>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col">
-          <h2>Code Editor</h2>
-          <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
-        </div>
-      </div>
-    </div>-->
-
     <nav id="sidebar" :style="sidebarStyle">
       <ul>
         <li>
@@ -57,21 +19,31 @@
       </button>
     </nav>
     <div id="content">
-      <Editor
-        v-if="showSettings"
-        editorId="editor-default-settings"
-        editorName="Default settings"
-        v-bind:initialValue="getDefaultSettingsString()"
-        v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
-      ></Editor>
-      <Editor
-        v-if="showSettings"
-        editorId="editor-current-settings"
-        editorName="Current Settings"
-        v-bind:initialValue="getMainEditorDefaultSettingsString()"
-        v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
-      ></Editor>
-      <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+      <div class="editor-wrapper" v-if="showSettings">
+        <p class="editor-name" id="editor-default-settings-name">Default settings</p>
+        <Editor
+          editorId="editor-default-settings"
+          editorName="Default settings"
+          v-bind:initialValue="getDefaultSettingsString()"
+          v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
+        ></Editor>
+      </div>
+      <div class="editor-wrapper" v-if="showSettings">
+        <p
+          class="editor-name"
+          id="editor-current-settings-name"
+          :style="currentSettingsStyle"
+        >Current settings</p>
+        <Editor
+          editorId="editor-current-settings"
+          editorName="Current Settings"
+          v-bind:initialValue="getMainEditorDefaultSettingsString()"
+          v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
+        ></Editor>
+      </div>
+      <div class="editor-wrapper">
+        <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+      </div>
     </div>
   </div>
 </template>
@@ -158,6 +130,18 @@ export default {
           "margin-left": "-200px"
         };
       }
+    },
+    currentSettingsStyle() {
+      if (!this.currentSettingsInvalid) {
+        return {
+          "background-color": "#9dbf9e"
+        };
+      } else {
+        return {
+          "background-color": "#FB3640",
+          'color': '#eef0f2'
+        };
+      }
     }
   },
   components: {
@@ -188,7 +172,7 @@ export default {
   min-width: 250px;
   max-width: 250px;
   background: #3a405a;
-  color: #99B2DD;
+  color: #99b2dd;
   transition: all 0.3s;
   font-family: sans-serif;
   font-size: 1.2em;
@@ -252,6 +236,17 @@ a:focus {
 #editor-default-settings-wrapper > .CodeMirror,
 #editor-current-settings-wrapper > .CodeMirror {
   top: 19px;
+}
+
+.editor-name {
+  padding: 0 15px;
+  font-family: monospace;
+  margin: 0 0;
+}
+
+#editor-default-settings-name {
+  background-color: #3a405a;
+  color: #eef0f2;
 }
 
 .centered {
