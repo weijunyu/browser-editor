@@ -38,11 +38,8 @@
       </div>
     </div>-->
 
-    <nav id="sidebar">
+    <nav id="sidebar" :style="sidebarStyle">
       <ul>
-        <li>
-          <a href="#">Editor</a>
-        </li>
         <li>
           <a href="#" @click="showSettings = !showSettings">
             Options
@@ -54,6 +51,10 @@
           <a href="#">Themes</a>
         </li>
       </ul>
+      <button class="btn btn-sidebar btn-dark" type="button" @click="toggleSidebar">
+        <i class="fas fa-angle-left" v-if="showSidebar"></i>
+        <i class="fas fa-angle-right" v-if="!showSidebar"></i>
+      </button>
     </nav>
     <div id="content">
       <Editor
@@ -128,6 +129,7 @@ export default {
       cmOptionsDefaultSettings,
       cmOptionsCurrentSettings,
       showSettings: false,
+      showSidebar: true,
       currentSettingsInvalid: false
     };
   },
@@ -140,6 +142,22 @@ export default {
     },
     applySettings() {
       EventBus.$emit("apply-settings");
+    },
+    toggleSidebar() {
+      this.showSidebar = !this.showSidebar;
+    }
+  },
+  computed: {
+    sidebarStyle() {
+      if (this.showSidebar) {
+        return {
+          "margin-left": 0
+        };
+      } else {
+        return {
+          "margin-left": "-200px"
+        };
+      }
     }
   },
   components: {
@@ -169,11 +187,12 @@ export default {
 #sidebar {
   min-width: 250px;
   max-width: 250px;
-  background: #5d576b;
-  color: #e6ebe0;
+  background: #3a405a;
+  color: #99B2DD;
   transition: all 0.3s;
   font-family: sans-serif;
   font-size: 1.2em;
+  position: relative;
 }
 
 #sidebar ul {
@@ -189,9 +208,10 @@ export default {
   justify-content: space-between;
 }
 
-#sidebar ul li a:hover {
-  color: #5d576b;
-  background: #e6ebe0;
+#sidebar ul li a:hover,
+#sidebar ul li a.active {
+  color: #3a405a;
+  background: #eef0f2;
 }
 
 #sidebar ul li a,
@@ -200,6 +220,13 @@ a:focus {
   color: inherit;
   text-decoration: none;
   transition: all 0.3s;
+}
+
+.btn-sidebar {
+  float: right;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 #content {
@@ -222,7 +249,8 @@ a:focus {
   height: 100%;
 }
 
-#editor-default-settings-wrapper > .CodeMirror, #editor-current-settings-wrapper > .CodeMirror {
+#editor-default-settings-wrapper > .CodeMirror,
+#editor-current-settings-wrapper > .CodeMirror {
   top: 19px;
 }
 
