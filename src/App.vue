@@ -3,8 +3,8 @@
     <nav id="sidebar" :style="sidebarStyle">
       <ul>
         <li>
-          <a href="#" @click="showSettings = !showSettings">
-            Options
+          <a href="#" @click="showSettings = !showSettings" :class="sidebarSettingsClass">
+            Settings
             <i class="fas fa-angle-right" v-if="!showSettings"></i>
             <i class="fas fa-angle-left" v-if="showSettings"></i>
           </a>
@@ -129,6 +129,13 @@ export default {
         return {
           "margin-left": "-200px"
         };
+      }
+    },
+    sidebarSettingsClass() {
+      if (this.showSettings) {
+        return {
+          active: true
+        }
       }
     },
     currentSettingsStyle() {
