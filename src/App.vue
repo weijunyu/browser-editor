@@ -222,6 +222,17 @@ a:focus {
 #content > .editor-wrapper {
   flex: 1 1 auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-wrapper > p,
+.editor-wrapper > div {
+  flex: 1 1 auto;
+}
+
+.editor-wrapper > p {
+  max-height: 19px;
 }
 
 .CodeMirror {
@@ -230,7 +241,7 @@ a:focus {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  height: auto;
 }
 
 #editor-default-settings-wrapper > .CodeMirror,

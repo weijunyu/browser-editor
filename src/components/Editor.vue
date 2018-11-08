@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:id="editorId + '-wrapper'" class="editor-wrapper">
+  <div v-bind:id="editorId + '-wrapper'">
     <textarea v-bind:id="editorId"></textarea>
   </div>
 </template>
