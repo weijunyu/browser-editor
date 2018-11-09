@@ -45,22 +45,31 @@ export default {
       });
     }
 
-    // Initialization for main editor
     if (this.editorId === "editor-main") {
-      const SettingsOptions = Object.keys(CodeMirror.defaults);
+      // Initialization for main editor
+      this.editorSettings = {};
+      for (let key of Object.keys(CodeMirror.defaults)) {
+        this.editorSettings[key] = this.cmEditor.getOption(key);
+      }
+      this.cmEditor.setValue(JSON.stringify(this.editorSettings, null, 2));
+
+      const defaultSettingNames = Object.keys(CodeMirror.defaults);
       EventBus.$on("new-settings-available", newSettings => {
-        try {
-          let finalSettings = Object.assign(
-            {},
-            CodeMirror.defaults,
-            newSettings
-          );
-          for (let key of Object.keys(finalSettings)) {
-            if (SettingsOptions.indexOf(key) !== -1) {
-              this.cmEditor.setOption(key, finalSettings[key]);
-            }
+        // Merge new settings with defaults
+        let mergedSettings = Object.assign(
+          {},
+          CodeMirror.defaults,
+          newSettings
+        );
+        // Compare merged settings with current settings. For ones that do not equate, change the current settings
+        for (let settingName of Object.keys(mergedSettings)) {
+          if (
+            mergedSettings[settingName] !== this.editorSettings[settingName]
+          ) {
+            this.editorSettings[settingName] = mergedSettings[settingName];
+            this.cmEditor.setOption(settingName, mergedSettings[settingName]);
           }
-        } catch (error) {}
+        }
       });
     }
   }
