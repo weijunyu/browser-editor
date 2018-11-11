@@ -53,6 +53,13 @@ import CodeMirror from "codemirror";
 import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 
+import "codemirror/lib/codemirror.css";
+
+import "codemirror/mode/javascript/javascript"; // For javascript mode
+import "codemirror/mode/python/python";
+import "codemirror/addon/edit/closebrackets"; // For auto close brackets
+import "codemirror/addon/selection/active-line"; // For active line styling
+
 // Main Editor
 let cmOptionsMainEditor = {
   mode: "",
@@ -135,7 +142,7 @@ export default {
       if (this.showSettings) {
         return {
           active: true
-        }
+        };
       }
     },
     currentSettingsStyle() {
@@ -146,7 +153,7 @@ export default {
       } else {
         return {
           "background-color": "#FB3640",
-          'color': '#eef0f2'
+          color: "#eef0f2"
         };
       }
     }

@@ -6,11 +6,6 @@
 
 <script>
 import CodeMirror from "codemirror";
-import "codemirror/lib/codemirror.css";
-
-import "codemirror/mode/javascript/javascript"; // For javascript mode
-import "codemirror/addon/edit/closebrackets"; // For auto close brackets
-import "codemirror/addon/selection/active-line"; // For active line styling
 
 import { EventBus, sortObject } from "../utils";
 
@@ -33,7 +28,6 @@ export default {
     let cmEditorElement = this.cmEditor.getWrapperElement();
     cmEditorElement.id = `${this.editorId}-element`;
 
-    // Initialization for current settings editor
     if (this.editorId === "editor-current-settings") {
       this.cmEditor.on("change", () => {
         try {
@@ -51,9 +45,8 @@ export default {
       for (let key of Object.keys(CodeMirror.defaults)) {
         this.editorSettings[key] = this.cmEditor.getOption(key);
       }
-      this.cmEditor.setValue(JSON.stringify(this.editorSettings, null, 2));
-
       const defaultSettingNames = Object.keys(CodeMirror.defaults);
+      // When current settings editor is changed
       EventBus.$on("new-settings-available", newSettings => {
         // Merge new settings with defaults
         let mergedSettings = Object.assign(
