@@ -37,7 +37,6 @@
         <Editor
           editorId="editor-current-settings"
           editorName="Current Settings"
-          v-bind:initialValue="getMainEditorDefaultSettingsString()"
           v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
         ></Editor>
       </div>
@@ -52,6 +51,7 @@
 import CodeMirror from "codemirror";
 import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
+import config from "./config";
 
 import "codemirror/lib/codemirror.css";
 
@@ -114,13 +114,14 @@ export default {
   },
   methods: {
     getDefaultSettingsString() {
-      return JSON.stringify(sortObject(CodeMirror.defaults), null, 2);
-    },
-    getMainEditorDefaultSettingsString() {
-      return JSON.stringify(this.cmOptionsMainEditor, null, 2);
-    },
-    applySettings() {
-      EventBus.$emit("apply-settings");
+      let defaultConfigurables = {};
+      // Only configurable settings
+      for (let settingName of Object.keys(CodeMirror.defaults)) {
+        if (config.configurables.includes(settingName)) {
+          defaultConfigurables[settingName] = CodeMirror.defaults[settingName];
+        }
+      }
+      return JSON.stringify(sortObject(defaultConfigurables), null, 2);
     },
     toggleSidebar() {
       this.showSidebar = !this.showSidebar;
@@ -272,13 +273,5 @@ a:focus {
 #editor-default-settings-name {
   background-color: #3a405a;
   color: #eef0f2;
-}
-
-.centered {
-  text-align: center;
-}
-.justified {
-  display: flex;
-  justify-content: space-between;
 }
 </style>
