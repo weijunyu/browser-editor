@@ -1,24 +1,30 @@
 <template>
   <div id="app">
-    <nav id="sidebar" :style="sidebarStyle">
+    <nav class="sidebar" :style="sidebarStyle">
       <ul>
         <li>
-          <a href="#" @click="showSettings = !showSettings" :class="sidebarSettingsClass">
+          <a href="#" @click="showMenu('settings')" :class="isActive('settings')">
             Settings
-            <i class="fas fa-angle-right" v-if="!showSettings"></i>
-            <i class="fas fa-angle-left" v-if="showSettings"></i>
+            <i class="fas fa-angle-right" v-if="!showSettings && showSidebar"></i>
+            <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
+            <i class="fas fa-cogs sidebar-collapsed-icon" v-if="!showSidebar"></i>
           </a>
         </li>
         <li>
-          <a href="#">Themes</a>
+          <a href="#" @click="showMenu('themes')" :class="isActive('themes')">
+            Theme
+            <i class="fas fa-angle-right" v-if="!showThemes && showSidebar"></i>
+            <i class="fas fa-angle-left" v-if="showThemes && showSidebar"></i>
+            <i class="fas fa-palette sidebar-collapsed-icon" v-if="!showSidebar"></i>
+          </a>
         </li>
       </ul>
-      <button class="btn btn-sidebar btn-dark" type="button" @click="toggleSidebar">
+      <button class="sidebar-button" type="button" @click="toggleSidebar">
         <i class="fas fa-angle-left" v-if="showSidebar"></i>
         <i class="fas fa-angle-right" v-if="!showSidebar"></i>
       </button>
     </nav>
-    <div id="content">
+    <div class="content">
       <div class="editor-wrapper" v-if="showSettings">
         <p class="editor-name" id="editor-default-settings-name">Default settings</p>
         <Editor
@@ -40,6 +46,17 @@
           v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
         ></Editor>
       </div>
+      <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
+        <ul>
+          <li v-for="(theme, index) in allThemes" :key="index">
+            <a href="#">
+              {{theme}}
+              <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
+              <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
       <div class="editor-wrapper">
         <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
       </div>
@@ -53,12 +70,22 @@ import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 import config from "./config";
 
-import "codemirror/lib/codemirror.css";
-
 import "codemirror/mode/javascript/javascript"; // For javascript mode
 import "codemirror/mode/python/python";
 import "codemirror/addon/edit/closebrackets"; // For auto close brackets
 import "codemirror/addon/selection/active-line"; // For active line styling
+
+// CSS imports
+import "codemirror/lib/codemirror.css";
+// Themes; see config.js
+import "codemirror/theme/3024-day.css";
+import "codemirror/theme/duotone-light.css";
+import "codemirror/theme/eclipse.css";
+import "codemirror/theme/neo.css";
+import "codemirror/theme/darcula.css";
+import "codemirror/theme/dracula.css";
+import "codemirror/theme/hopscotch.css";
+import "codemirror/theme/monokai.css";
 
 // Main Editor
 let cmOptionsMainEditor = {
@@ -100,16 +127,20 @@ let cmOptionsCurrentSettings = {
   }
 };
 
+let allThemes = [...config.themes.light, ...config.themes.dark];
+
 export default {
   name: "app",
   data: function() {
     return {
+      allThemes,
       cmOptionsMainEditor,
       cmOptionsDefaultSettings,
       cmOptionsCurrentSettings,
+      currentSettingsInvalid: false,
       showSettings: false,
-      showSidebar: true,
-      currentSettingsInvalid: false
+      showThemes: false,
+      showSidebar: true
     };
   },
   methods: {
@@ -125,6 +156,44 @@ export default {
     },
     toggleSidebar() {
       this.showSidebar = !this.showSidebar;
+    },
+    showMenu(menuType) {
+      if (menuType === "settings") {
+        this.showSettings = !this.showSettings;
+        this.showThemes = false;
+      } else if (menuType === "themes") {
+        this.showThemes = !this.showThemes;
+        this.showSettings = false;
+      }
+    },
+    isActive(menuType) {
+      switch (menuType) {
+        case "settings": {
+          if (this.showSettings) {
+            return { active: true };
+          }
+          break;
+        }
+        case "themes": {
+          if (this.showThemes) {
+            return { active: true };
+          }
+          break;
+        }
+      }
+    },
+    getThemeOptionStyle(index) {
+      if (0 <= index && index < 4) {
+        return {
+          "background-color": "#eef0f2",
+          color: "#3a405a"
+        };
+      } else {
+        return {
+          "background-color": "#3a405a",
+          color: "#eef0f2"
+        };
+      }
     }
   },
   computed: {
@@ -136,13 +205,6 @@ export default {
       } else {
         return {
           "margin-left": "-200px"
-        };
-      }
-    },
-    sidebarSettingsClass() {
-      if (this.showSettings) {
-        return {
-          active: true
         };
       }
     },
@@ -183,37 +245,42 @@ export default {
   min-height: 100vh;
 }
 
-#sidebar {
+/* Sidebar */
+.sidebar,
+.menu {
   min-width: 250px;
   max-width: 250px;
   background: #3a405a;
-  color: #99b2dd;
+  color: #eef0f2;
   transition: all 0.3s;
   font-family: sans-serif;
   font-size: 1.2em;
   position: relative;
 }
 
-#sidebar ul {
+.sidebar ul,
+.menu ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-#sidebar ul li a {
+.sidebar ul li a,
+.menu ul li a {
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-#sidebar ul li a:hover,
-#sidebar ul li a.active {
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
   color: #3a405a;
   background: #eef0f2;
 }
 
-#sidebar ul li a,
+.sidebar ul li a,
+.menu a,
 a:hover,
 a:focus {
   color: inherit;
@@ -221,20 +288,14 @@ a:focus {
   transition: all 0.3s;
 }
 
-.btn-sidebar {
-  float: right;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-#content {
+/* Main content*/
+.content {
   flex: 1 1 auto;
   position: relative;
   display: flex;
 }
 
-#content > .editor-wrapper {
+.editor-wrapper {
   flex: 1 1 auto;
   position: relative;
   display: flex;
@@ -270,8 +331,38 @@ a:focus {
   margin: 0 0;
 }
 
+/* Settings menu */
 #editor-default-settings-name {
   background-color: #3a405a;
   color: #eef0f2;
+}
+
+/* Themes menu */
+#themes-menu {
+  flex: 0 1 auto;
+  background: #444a61;
+}
+
+#themes-menu ul li a:hover,
+#themes-menu ul li a.active {
+  color: #444a61;
+  background: #eef0f2;
+}
+
+/* Shrinking sidebar */
+.sidebar-button {
+  background-color: #5a59877d;
+  border-radius: 0.12em;
+  border: 0.1em solid #ffffff;
+  bottom: 10px;
+  color: #eef0f2;
+  float: right;
+  position: absolute;
+  right: 8px;
+  transition: all 0.2s;
+}
+.sidebar-button:hover {
+  color: #000;
+  background-color: #eef0f2;
 }
 </style>
