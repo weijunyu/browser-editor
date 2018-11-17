@@ -4,7 +4,7 @@ import App from './App.vue';
 // import 'bootstrap';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './styles/reset.css';
+import './styles/normalize.css';
 
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
 import '@fortawesome/fontawesome-free/css/solid.min.css';
