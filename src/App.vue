@@ -3,7 +3,7 @@
     <nav class="sidebar" :style="sidebarStyle">
       <ul>
         <li>
-          <a href="#" @click="showMenu('settings')" :class="isActive('settings')">
+          <a href="#" @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
             Settings
             <i class="fas fa-angle-right" v-if="!showSettings && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
@@ -11,7 +11,7 @@
           </a>
         </li>
         <li>
-          <a href="#" @click="showMenu('themes')" :class="isActive('themes')">
+          <a href="#" @click="showMenu('themes')" :class="{active: isMenuActive('themes')}">
             Theme
             <i class="fas fa-angle-right" v-if="!showThemes && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showThemes && showSidebar"></i>
@@ -49,7 +49,7 @@
       <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
         <ul>
           <li v-for="(theme, index) in allThemes" :key="index">
-            <a href="#" @click="setTheme(theme)">
+            <a href="#" @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
               {{theme}}
               <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
               <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
@@ -88,6 +88,7 @@ import "codemirror/theme/hopscotch.css";
 import "codemirror/theme/monokai.css";
 
 // Main Editor initial settings
+let initialTheme = 'darcula';
 let cmOptionsMainEditor = {
   mode: "",
   lineNumbers: true,
@@ -97,7 +98,8 @@ let cmOptionsMainEditor = {
       let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
       cm.replaceSelection(spaces);
     }
-  }
+  },
+  theme: initialTheme
 };
 
 let allThemes = [...config.themes.light, ...config.themes.dark];
@@ -112,7 +114,7 @@ export default {
       showSettings: false,
       showThemes: false,
       showSidebar: true,
-      theme: "default"
+      theme: initialTheme
     };
   },
   methods: {
@@ -138,21 +140,21 @@ export default {
         this.showSettings = false;
       }
     },
-    isActive(menuType) {
+    isMenuActive(menuType) {
       switch (menuType) {
         case "settings": {
-          if (this.showSettings) {
-            return { active: true };
-          }
-          break;
+          return this.showSettings;
         }
         case "themes": {
-          if (this.showThemes) {
-            return { active: true };
-          }
-          break;
+          return this.showThemes;
+        }
+        default: {
+          return false;
         }
       }
+    },
+    isThemeActive(themeName) {
+      return this.theme === themeName;
     },
     getThemeOptionStyle(index) {
       if (0 <= index && index < 4) {
@@ -168,6 +170,7 @@ export default {
       }
     },
     setTheme(themeName) {
+      // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
     }
   },
@@ -179,7 +182,7 @@ export default {
         };
       } else {
         return {
-          "margin-left": "-200px"
+          "margin-left": "-160px"
         };
       }
     },
@@ -255,8 +258,8 @@ export default {
 /* Sidebar */
 .sidebar,
 .menu {
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 200px;
+  max-width: 200px;
   background: #3a405a;
   color: #eef0f2;
   transition: all 0.3s;
@@ -360,8 +363,8 @@ a:focus {
 /* Shrinking sidebar */
 .sidebar-button {
   background-color: #5a59877d;
-  border-radius: 0.12em;
-  border: 0.1em solid #ffffff;
+  border-radius: 0.15em;
+  border: 0.8px solid #eef0f2;
   bottom: 10px;
   color: #eef0f2;
   float: right;
