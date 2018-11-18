@@ -30,6 +30,11 @@ export default {
     let cmEditorElement = this.cmEditor.getWrapperElement();
     cmEditorElement.id = `${this.editorId}-element`;
 
+    // When theme is changed
+    EventBus.$on('set-theme', themeName => {
+      this.cmEditor.setOption('theme', themeName);
+    })
+
     if (this.editorId === "editor-current-settings") {
       // When mounted, take settings from editor-main
       EventBus.$on("current-settings", currentSettings => {
@@ -96,5 +101,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -49,7 +49,7 @@
       <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
         <ul>
           <li v-for="(theme, index) in allThemes" :key="index">
-            <a href="#">
+            <a href="#" @click="setTheme(theme)">
               {{theme}}
               <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
               <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
@@ -87,36 +87,9 @@ import "codemirror/theme/dracula.css";
 import "codemirror/theme/hopscotch.css";
 import "codemirror/theme/monokai.css";
 
-// Main Editor
+// Main Editor initial settings
 let cmOptionsMainEditor = {
   mode: "",
-  lineNumbers: true,
-  styleActiveLine: true,
-  extraKeys: {
-    Tab: function(cm) {
-      let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-      cm.replaceSelection(spaces);
-    }
-  }
-};
-
-// Default settings editor (read-only)
-let cmOptionsDefaultSettings = {
-  mode: {
-    name: "javascript",
-    json: true
-  },
-  lineNumbers: true,
-  styleActiveLine: true,
-  readOnly: true
-};
-
-// Current settings editor
-let cmOptionsCurrentSettings = {
-  mode: {
-    name: "javascript",
-    json: true
-  },
   lineNumbers: true,
   styleActiveLine: true,
   extraKeys: {
@@ -135,12 +108,11 @@ export default {
     return {
       allThemes,
       cmOptionsMainEditor,
-      cmOptionsDefaultSettings,
-      cmOptionsCurrentSettings,
       currentSettingsInvalid: false,
       showSettings: false,
       showThemes: false,
-      showSidebar: true
+      showSidebar: true,
+      theme: "default"
     };
   },
   methods: {
@@ -194,6 +166,9 @@ export default {
           color: "#eef0f2"
         };
       }
+    },
+    setTheme(themeName) {
+      EventBus.$emit("set-theme", themeName);
     }
   },
   computed: {
@@ -219,6 +194,35 @@ export default {
           color: "#eef0f2"
         };
       }
+    },
+    cmOptionsDefaultSettings() {
+      return {
+        mode: {
+          name: "javascript",
+          json: true
+        },
+        lineNumbers: true,
+        styleActiveLine: true,
+        readOnly: true,
+        theme: this.theme
+      };
+    },
+    cmOptionsCurrentSettings() {
+      return {
+        mode: {
+          name: "javascript",
+          json: true
+        },
+        lineNumbers: true,
+        styleActiveLine: true,
+        extraKeys: {
+          Tab: function(cm) {
+            let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+            cm.replaceSelection(spaces);
+          }
+        },
+        theme: this.theme
+      };
     }
   },
   components: {
@@ -231,6 +235,9 @@ export default {
     });
     EventBus.$on("new-settings-available", () => {
       this.currentSettingsInvalid = false;
+    });
+    EventBus.$on("set-theme", themeName => {
+      this.theme = themeName;
     });
   }
 };
@@ -300,6 +307,7 @@ a:focus {
   position: relative;
   display: flex;
   flex-direction: column;
+  border: 0.5px solid #3a405a;
 }
 
 .editor-wrapper > p,
