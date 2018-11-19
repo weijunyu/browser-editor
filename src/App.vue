@@ -3,19 +3,30 @@
     <nav class="sidebar" :style="sidebarStyle">
       <ul>
         <li>
-          <a href="#" @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
-            Settings
-            <i class="fas fa-angle-right" v-if="!showSettings && showSidebar"></i>
-            <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
-            <i class="fas fa-cogs sidebar-collapsed-icon" v-if="!showSidebar"></i>
+          <a href="#" @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
+            <span>
+              <i class="fas fa-code"></i>&nbsp;Mode
+            </span>
+            <i class="fas fa-angle-right" v-if="!showModes && showSidebar"></i>
+            <i class="fas fa-angle-left" v-if="showModes && showSidebar"></i>
           </a>
         </li>
         <li>
           <a href="#" @click="showMenu('themes')" :class="{active: isMenuActive('themes')}">
-            Theme
+            <span>
+              <i class="fas fa-palette"></i>&nbsp;Theme
+            </span>
             <i class="fas fa-angle-right" v-if="!showThemes && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showThemes && showSidebar"></i>
-            <i class="fas fa-palette sidebar-collapsed-icon" v-if="!showSidebar"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
+            <span>
+              <i class="fas fa-cogs"></i>&nbsp;Settings
+            </span>
+            <i class="fas fa-angle-right" v-if="!showSettings && showSidebar"></i>
+            <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
           </a>
         </li>
       </ul>
@@ -25,6 +36,28 @@
       </button>
     </nav>
     <div class="content">
+      <!-- Order matters! Contents are arranged using flexbox. -->
+      <!-- Mode -->
+      <div v-if="showModes" class="editor-wrapper menu" id="modes-menu">
+        <ul>
+          <li v-for="(mode, index) in allModes" :key="index">
+            <a href="#">{{mode.name}}</a>
+          </li>
+        </ul>
+      </div>
+      <!-- Themes -->
+      <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
+        <ul>
+          <li v-for="(theme, index) in allThemes" :key="index">
+            <a href="#" @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
+              {{theme}}
+              <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
+              <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- Settings: default -->
       <div class="editor-wrapper" v-if="showSettings">
         <p class="editor-name" id="editor-default-settings-name">Default settings</p>
         <Editor
@@ -34,6 +67,7 @@
           v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
         ></Editor>
       </div>
+      <!-- Settings: current -->
       <div class="editor-wrapper" v-if="showSettings">
         <p
           class="editor-name"
@@ -46,17 +80,7 @@
           v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
         ></Editor>
       </div>
-      <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
-        <ul>
-          <li v-for="(theme, index) in allThemes" :key="index">
-            <a href="#" @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
-              {{theme}}
-              <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
-              <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <!-- Main Editor -->
       <div class="editor-wrapper">
         <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
       </div>
@@ -71,7 +95,7 @@ import { EventBus, sortObject } from "./utils";
 import config from "./config";
 
 // Main Editor initial settings
-let initialTheme = 'darcula';
+let initialTheme = "darcula";
 let cmOptionsMainEditor = {
   mode: "",
   lineNumbers: true,
@@ -85,15 +109,15 @@ let cmOptionsMainEditor = {
   theme: initialTheme
 };
 
-let allThemes = [...config.themes.light, ...config.themes.dark];
-
 export default {
   name: "app",
   data: function() {
     return {
-      allThemes,
+      allThemes: [...config.themes.light, ...config.themes.dark],
+      allModes: config.modes,
       cmOptionsMainEditor,
       currentSettingsInvalid: false,
+      showModes: false,
       showSettings: false,
       showThemes: false,
       showSidebar: true,
@@ -115,12 +139,27 @@ export default {
       this.showSidebar = !this.showSidebar;
     },
     showMenu(menuType) {
-      if (menuType === "settings") {
-        this.showSettings = !this.showSettings;
-        this.showThemes = false;
-      } else if (menuType === "themes") {
-        this.showThemes = !this.showThemes;
-        this.showSettings = false;
+      switch (menuType) {
+        case "settings":
+          this.showSettings = !this.showSettings;
+          this.showThemes = false;
+          this.showModes = false;
+          break;
+        case "themes":
+          this.showThemes = !this.showThemes;
+          this.showSettings = false;
+          this.showModes = false;
+          break;
+        case "modes":
+          this.showModes = !this.showModes;
+          this.showSettings = false;
+          this.showThemes = false;
+          break;
+        default:
+          this.showModes = false;
+          this.showSettings = false;
+          this.showThemes = false;
+          throw new Error("Menu Type not recognized!");
       }
     },
     isMenuActive(menuType) {
@@ -130,6 +169,9 @@ export default {
         }
         case "themes": {
           return this.showThemes;
+        }
+        case "modes": {
+          return this.showModes;
         }
         default: {
           return false;
@@ -249,6 +291,7 @@ export default {
   font-family: sans-serif;
   font-size: 1.2em;
   position: relative;
+  border: 0.5px solid #3a405a;
 }
 
 .sidebar ul,
@@ -269,6 +312,13 @@ export default {
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
   color: #3a405a;
+  background: #eef0f2;
+}
+
+/* Menu items have lighter background */
+.menu ul li a:hover,
+.menu ul li a.active {
+  color: #444a61;
   background: #eef0f2;
 }
 
@@ -293,7 +343,6 @@ a:focus {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 0.5px solid #3a405a;
 }
 
 .editor-wrapper > p,
@@ -317,6 +366,7 @@ a:focus {
   height: auto;
 }
 
+/* Make space for headings for default/current settings editors */
 #editor-default-settings-wrapper > .CodeMirror,
 #editor-current-settings-wrapper > .CodeMirror {
   top: 19px;
@@ -334,16 +384,10 @@ a:focus {
   color: #eef0f2;
 }
 
-/* Themes menu */
-#themes-menu {
+/* Themes and modes menu */
+.menu {
   flex: 0 1 auto;
   background: #444a61;
-}
-
-#themes-menu ul li a:hover,
-#themes-menu ul li a.active {
-  color: #444a61;
-  background: #eef0f2;
 }
 
 /* Shrinking sidebar */

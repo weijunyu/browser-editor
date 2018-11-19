@@ -6,10 +6,14 @@ import './styles/normalize.css';
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
 import '@fortawesome/fontawesome-free/css/solid.min.css';
 
-// Main CodeMirror
-import "codemirror/mode/javascript/javascript"; // For javascript mode
+// Main import + modes
+import "codemirror/mode/dockerfile/dockerfile";
+import "codemirror/mode/javascript/javascript"; // also for json & typescript
 import "codemirror/mode/python/python";
-import "codemirror/mode/xml/xml";
+import "codemirror/mode/shell/shell";
+import "codemirror/mode/sql/sql";
+import "codemirror/mode/xml/xml"; // also for html mode
+import "codemirror/mode/yaml/yaml";
 // Addons
 import "codemirror/addon/edit/closebrackets"; // For auto close brackets
 import "codemirror/addon/selection/active-line"; // For active line styling
@@ -22,6 +26,8 @@ import "codemirror/addon/search/matchesonscrollbar.js";
 import "codemirror/addon/search/jump-to-line.js";
 // CSS
 import "codemirror/lib/codemirror.css";
+import "codemirror/addon/dialog/dialog.css";
+import "codemirror/addon/search/matchesonscrollbar.css";
 // Themes; see config.js
 import "codemirror/theme/3024-day.css";
 import "codemirror/theme/duotone-light.css";

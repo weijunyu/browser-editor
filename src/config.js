@@ -1,4 +1,17 @@
 export default {
+    modes: [
+        { name: 'null', mode: 'null'},
+        { name: 'dockerfile', mode: 'dockerfile'},
+        { name: 'html', mode: 'text/html'},
+        { name: 'javascript', mode: 'javascript'},
+        { name: 'json', mode: 'application/json'},
+        { name: 'python', mode: 'python'},
+        { name: 'shell', mode: 'shell'},
+        { name: 'sql', mode: 'sql'},
+        { name: 'typescript', mode: 'application/typescript'},
+        { name: 'xml', mode: 'xml'},
+        { name: 'yaml', mode: 'yaml'},
+    ],
     configurables: [
         'electricChars', // boolean; [true] = reindent automatically when specific character is typed, if mode supports
         'indentUnit', // integer; [2] How many spaces a block (whatever that means in the edited language) should be indented. The default is 2.
