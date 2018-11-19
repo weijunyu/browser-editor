@@ -10,7 +10,6 @@ export default {
         'showCursorWhenSelecting', // boolean; [false]
         'smartIndent', // boolean; [true] = context sensitive indentation provided by mode, false = indent same as previous line
         'tabSize', // integer; [4]
-        'theme', // string; [default]
         // addons
         'autoCloseBrackets', // from addon/edit/closebrackets.js
         'styleActiveLine' // from addon/selection/active-line.js

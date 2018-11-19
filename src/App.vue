@@ -70,23 +70,6 @@ import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 import config from "./config";
 
-import "codemirror/mode/javascript/javascript"; // For javascript mode
-import "codemirror/mode/python/python";
-import "codemirror/addon/edit/closebrackets"; // For auto close brackets
-import "codemirror/addon/selection/active-line"; // For active line styling
-
-// CSS imports
-import "codemirror/lib/codemirror.css";
-// Themes; see config.js
-import "codemirror/theme/3024-day.css";
-import "codemirror/theme/duotone-light.css";
-import "codemirror/theme/eclipse.css";
-import "codemirror/theme/neo.css";
-import "codemirror/theme/darcula.css";
-import "codemirror/theme/dracula.css";
-import "codemirror/theme/hopscotch.css";
-import "codemirror/theme/monokai.css";
-
 // Main Editor initial settings
 let initialTheme = 'darcula';
 let cmOptionsMainEditor = {
@@ -322,7 +305,10 @@ a:focus {
   max-height: 19px;
 }
 
-.CodeMirror {
+/* For actual .CodeMirror elements. Use absolute positioning so they resize properly. */
+#editor-main-element,
+#editor-default-settings-element,
+#editor-current-settings-element {
   position: absolute;
   top: 0;
   bottom: 0;
