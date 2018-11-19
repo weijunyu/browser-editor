@@ -41,7 +41,10 @@
       <div v-if="showModes" class="editor-wrapper menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
-            <a href="#">{{mode.name}} <i :class="mode.icon"></i></a>
+            <a href="#" @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
+              {{mode.name}}
+              <i :class="mode.icon"></i>
+            </a>
           </li>
         </ul>
       </div>
@@ -96,8 +99,9 @@ import config from "./config";
 
 // Main Editor initial settings
 let initialTheme = "darcula";
+let initialMode = 'text'; // 'text' has no effect on codemirror mode; will initialize to 'null'
 let cmOptionsMainEditor = {
-  mode: "",
+  mode: initialMode,
   lineNumbers: true,
   styleActiveLine: true,
   extraKeys: {
@@ -121,6 +125,7 @@ export default {
       showSettings: false,
       showThemes: false,
       showSidebar: true,
+      mode: initialMode,
       theme: initialTheme
     };
   },
@@ -181,6 +186,9 @@ export default {
     isThemeActive(themeName) {
       return this.theme === themeName;
     },
+    isModeActive(modeName) {
+      return this.mode === modeName;
+    },
     getThemeOptionStyle(index) {
       if (0 <= index && index < 4) {
         return {
@@ -195,8 +203,13 @@ export default {
       }
     },
     setTheme(themeName) {
+      this.theme = themeName;
       // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
+    },
+    setMode(mode) {
+      this.mode = mode.name;
+      EventBus.$emit("set-mode", mode.mode);
     }
   },
   computed: {
@@ -263,9 +276,6 @@ export default {
     });
     EventBus.$on("new-settings-available", () => {
       this.currentSettingsInvalid = false;
-    });
-    EventBus.$on("set-theme", themeName => {
-      this.theme = themeName;
     });
   }
 };
