@@ -1,16 +1,16 @@
 export default {
     modes: [
-        { name: 'text', mode: 'null'},
-        { name: 'dockerfile', mode: 'dockerfile'},
-        { name: 'html', mode: 'text/html'},
-        { name: 'javascript', mode: 'javascript'},
-        { name: 'json', mode: 'application/json'},
-        { name: 'python', mode: 'python'},
-        { name: 'shell', mode: 'shell'},
-        { name: 'sql', mode: 'sql'},
-        { name: 'typescript', mode: 'application/typescript'},
-        { name: 'xml', mode: 'xml'},
-        { name: 'yaml', mode: 'yaml'},
+        { name: 'text', mode: 'null', icon: 'fas fa-font' },
+        { name: 'html', mode: 'text/html', icon: 'fab fa-html5' },
+        { name: 'xml', mode: 'xml', icon: 'fas fa-code' },
+        { name: 'javascript', mode: 'javascript', icon: 'fab fa-js-square' },
+        { name: 'typescript', mode: 'application/typescript', icon: 'fab fa-js-square' },
+        { name: 'json', mode: 'application/json', icon: 'fab fa-js-square' },
+        { name: 'python', mode: 'python', icon: 'fab fa-python' },
+        { name: 'shell', mode: 'shell', icon: 'fas fa-terminal' },
+        { name: 'sql', mode: 'sql', icon: 'fas fa-database' },
+        { name: 'yaml', mode: 'yaml', icon: 'fas fa-bars' },
+        { name: 'dockerfile', mode: 'dockerfile', icon: 'fab fa-docker' },
     ],
     configurables: [
         'electricChars', // boolean; [true] = reindent automatically when specific character is typed, if mode supports

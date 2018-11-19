@@ -37,11 +37,11 @@
     </nav>
     <div class="content">
       <!-- Order matters! Contents are arranged using flexbox. -->
-      <!-- Mode -->
+      <!-- Modes -->
       <div v-if="showModes" class="editor-wrapper menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
-            <a href="#">{{mode.name}}</a>
+            <a href="#">{{mode.name}} <i :class="mode.icon"></i></a>
           </li>
         </ul>
       </div>
