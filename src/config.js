@@ -1,6 +1,6 @@
 export default {
     modes: [
-        { name: 'null', mode: 'null'},
+        { name: 'text', mode: 'null'},
         { name: 'dockerfile', mode: 'dockerfile'},
         { name: 'html', mode: 'text/html'},
         { name: 'javascript', mode: 'javascript'},
