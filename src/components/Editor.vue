@@ -96,6 +96,10 @@ export default {
           }
         }
       });
+
+      EventBus.$on('set-mode', newMode => {
+        this.cmEditor.setOption('mode', newMode);
+      })
     }
   }
 };

@@ -25,10 +25,11 @@ import "codemirror/addon/search/search.js";
 import "codemirror/addon/scroll/annotatescrollbar.js";
 import "codemirror/addon/search/matchesonscrollbar.js";
 import "codemirror/addon/search/jump-to-line.js";
-// CSS
-import "codemirror/lib/codemirror.css";
+// Addons CSS for search
 import "codemirror/addon/dialog/dialog.css";
 import "codemirror/addon/search/matchesonscrollbar.css";
+// Main CSS
+import "codemirror/lib/codemirror.css";
 // Themes; see config.js
 import "codemirror/theme/3024-day.css";
 import "codemirror/theme/duotone-light.css";
