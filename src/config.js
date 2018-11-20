@@ -19,11 +19,11 @@ export default {
         'lineNumbers', // boolean; [false]
         'lineSeparator', // string | null; [null] = split on CRLF/LF/CR; LF used in output, e.g. getValue()
         'lineWrapping', // boolean; [false] = scroll, true = wrap
-        'mode', // string | object; [javascript?]
         'showCursorWhenSelecting', // boolean; [false]
         'smartIndent', // boolean; [true] = context sensitive indentation provided by mode, false = indent same as previous line
         'tabSize', // integer; [4]
         // addons
+        'matchBrackets',
         'autoCloseBrackets', // from addon/edit/closebrackets.js
         'styleActiveLine' // from addon/selection/active-line.js
     ],

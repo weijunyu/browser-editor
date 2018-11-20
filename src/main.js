@@ -18,6 +18,7 @@ import "codemirror/mode/yaml/yaml";
 // Addons
 import "codemirror/addon/edit/closebrackets"; // For auto close brackets
 import "codemirror/addon/selection/active-line"; // For active line styling
+import 'codemirror/addon/edit/matchbrackets';
 // Addons for search
 import "codemirror/addon/dialog/dialog.js";
 import "codemirror/addon/search/searchcursor.js";
