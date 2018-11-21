@@ -14,14 +14,14 @@ module.exports = {
     chainWebpack: config => {
         if (production) {
             config
-            .plugin('html')
-            .tap(args => {
-                args[0].inlineSource = '.js$';
-                return args
-            })
-        config
-            .plugin('html-inline-source')
-            .use(HtmlWebpackInlineSourcePlugin)
+                .plugin('html')
+                .tap(args => {
+                    args[0].inlineSource = '.js$';
+                    return args
+                })
+            config
+                .plugin('html-inline-source')
+                .use(HtmlWebpackInlineSourcePlugin)
         }
     }
 }
