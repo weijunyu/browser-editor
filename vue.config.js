@@ -1,16 +1,19 @@
 let HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
-
+let production = process.env.NODE_ENV === 'production';
 module.exports = {
     baseUrl: '',
     configureWebpack: config => {
-        config.optimization = {
-            splitChunks: {
-                chunks: 'all'
+        if (production) {
+            config.optimization = {
+                splitChunks: {
+                    chunks: 'all'
+                }
             }
         }
     },
     chainWebpack: config => {
-        config
+        if (production) {
+            config
             .plugin('html')
             .tap(args => {
                 args[0].inlineSource = '.js$';
@@ -19,5 +22,6 @@ module.exports = {
         config
             .plugin('html-inline-source')
             .use(HtmlWebpackInlineSourcePlugin)
+        }
     }
 }
