@@ -402,7 +402,7 @@ a:focus {
 
 /* Shrinking sidebar */
 .sidebar-button {
-  background-color: #5a59877d;
+  background-color: #5a5987;
   border-radius: 0.15em;
   border: 0.8px solid #eef0f2;
   bottom: 10px;
