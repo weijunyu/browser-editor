@@ -19,6 +19,13 @@ npm run serve
 npm run build
 ```
 
+### Build and run on Docker
+```
+npm run build
+docker build --tag ${IMAGE_TAG} .
+docker run --name ${CONTAINER_NAME} -d [-p ${HOST_PORT}:${CONTAINER_PORT}] ${IMAGE_TAG}
+```
+
 ### Run your tests
 ```
 npm run test
