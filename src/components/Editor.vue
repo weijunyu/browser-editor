@@ -6,6 +6,7 @@
 
 <script>
 import CodeMirror from "codemirror";
+import FileSaver from "file-saver";
 
 import { EventBus } from "../utils";
 
@@ -31,9 +32,9 @@ export default {
     cmEditorElement.id = `${this.editorId}-element`;
 
     // When theme is changed
-    EventBus.$on('set-theme', themeName => {
-      this.cmEditor.setOption('theme', themeName);
-    })
+    EventBus.$on("set-theme", themeName => {
+      this.cmEditor.setOption("theme", themeName);
+    });
 
     if (this.editorId === "editor-current-settings") {
       // When mounted, take settings from editor-main
@@ -97,9 +98,16 @@ export default {
         }
       });
 
-      EventBus.$on('set-mode', newMode => {
-        this.cmEditor.setOption('mode', newMode);
-      })
+      EventBus.$on("set-mode", newMode => {
+        this.cmEditor.setOption("mode", newMode);
+      });
+
+      EventBus.$on("save-file", (options) => {
+        let blob = new Blob([this.cmEditor.getValue()], {
+          type: "text/plain;charset=utf-8"
+        });
+        FileSaver.saveAs(blob, `file.${options.mode.fileExtension}`);
+      });
     }
   }
 };

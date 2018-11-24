@@ -29,6 +29,13 @@
             <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
           </a>
         </li>
+        <li>
+          <input type="file" name="file-loader" id="file-loader" class="file-loader-hidden">
+          <label for="file-loader" class="file-loader-button">Open file</label>
+        </li>
+        <li>
+          <a href="#" @click="emitSaveFileEvent">Save file</a>
+        </li>
       </ul>
       <button class="sidebar-button" type="button" @click="toggleSidebar">
         <i class="fas fa-angle-left" v-if="showSidebar"></i>
@@ -99,9 +106,9 @@ import config from "./config";
 
 // Main Editor initial settings
 let initialTheme = "darcula";
-let initialMode = 'text'; // 'text' has no effect on codemirror mode; will initialize to 'null'
+let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
 let cmOptionsMainEditor = {
-  mode: initialMode,
+  mode: initialMode.mode,
   lineNumbers: true,
   styleActiveLine: true,
   extraKeys: {
@@ -128,6 +135,9 @@ export default {
       mode: initialMode,
       theme: initialTheme
     };
+  },
+  components: {
+    Editor
   },
   methods: {
     getDefaultSettingsString() {
@@ -187,7 +197,7 @@ export default {
       return this.theme === themeName;
     },
     isModeActive(modeName) {
-      return this.mode === modeName;
+      return this.mode.name === modeName;
     },
     getThemeOptionStyle(index) {
       if (0 <= index && index < 4) {
@@ -207,9 +217,14 @@ export default {
       // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
     },
-    setMode(mode) {
-      this.mode = mode.name;
-      EventBus.$emit("set-mode", mode.mode);
+    setMode(mode) { 
+      this.mode = mode;
+      EventBus.$emit("set-mode", mode.mode); // Event used by main editor to set mode
+    },
+    emitSaveFileEvent() {
+      EventBus.$emit("save-file", {
+        mode: this.mode
+      });
     }
   },
   computed: {
@@ -266,9 +281,6 @@ export default {
       };
     }
   },
-  components: {
-    Editor
-  },
   created() {
     // If current settings is valid JSON or not; fired from current-settings editor.
     EventBus.$on("current-settings-invalid", () => {
@@ -312,7 +324,8 @@ export default {
 }
 
 .sidebar ul li a,
-.menu ul li a {
+.menu ul li a,
+.file-loader-button {
   padding: 10px;
   display: flex;
   align-items: center;
@@ -320,9 +333,11 @@ export default {
 }
 
 .sidebar ul li a:hover,
+.file-loader-button:hover,
 .sidebar ul li a.active {
   color: #3a405a;
   background: #eef0f2;
+  cursor: pointer;
 }
 
 /* Menu items have lighter background */
@@ -415,5 +430,14 @@ a:focus {
 .sidebar-button:hover {
   color: #000;
   background-color: #eef0f2;
+}
+
+.file-loader-hidden {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 </style>

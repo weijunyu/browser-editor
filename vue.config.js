@@ -2,15 +2,15 @@ let HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
 let production = process.env.NODE_ENV === 'production';
 module.exports = {
     baseUrl: '',
-    configureWebpack: config => {
-        if (production) {
-            config.optimization = {
-                splitChunks: {
-                    chunks: 'all'
-                }
-            }
-        }
-    },
+    // configureWebpack: config => {
+    //     if (production) {
+    //         config.optimization = {
+    //             splitChunks: {
+    //                 chunks: 'all'
+    //             }
+    //         }
+    //     }
+    // },
     chainWebpack: config => {
         if (production) {
             config

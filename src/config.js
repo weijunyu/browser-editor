@@ -1,16 +1,16 @@
 export default {
     modes: [
-        { name: 'text', mode: 'null', icon: 'fas fa-font' },
-        { name: 'html', mode: 'text/html', icon: 'fab fa-html5' },
-        { name: 'xml', mode: 'xml', icon: 'fas fa-code' },
-        { name: 'javascript', mode: 'javascript', icon: 'fab fa-js-square' },
-        { name: 'typescript', mode: 'application/typescript', icon: 'fab fa-js-square' },
-        { name: 'json', mode: 'application/json', icon: 'fab fa-js-square' },
-        { name: 'python', mode: 'python', icon: 'fab fa-python' },
-        { name: 'shell', mode: 'shell', icon: 'fas fa-terminal' },
-        { name: 'sql', mode: 'sql', icon: 'fas fa-database' },
-        { name: 'yaml', mode: 'yaml', icon: 'fas fa-bars' },
-        { name: 'dockerfile', mode: 'dockerfile', icon: 'fab fa-docker' },
+        { fileExtension: 'txt', name: 'text', mode: 'null', icon: 'fas fa-font' },
+        { fileExtension: 'html', name: 'html', mode: 'text/html', icon: 'fab fa-html5' },
+        { fileExtension: 'xml', name: 'xml', mode: 'xml', icon: 'fas fa-code' },
+        { fileExtension: 'js', name: 'javascript', mode: 'javascript', icon: 'fab fa-js-square' },
+        { fileExtension: 'ts', name: 'typescript', mode: 'application/typescript', icon: 'fab fa-js-square' },
+        { fileExtension: 'json', name: 'json', mode: 'application/json', icon: 'fab fa-js-square' },
+        { fileExtension: 'py', name: 'python', mode: 'python', icon: 'fab fa-python' },
+        { fileExtension: 'sh', name: 'shell', mode: 'shell', icon: 'fas fa-terminal' },
+        { fileExtension: 'sql', name: 'sql', mode: 'sql', icon: 'fas fa-database' },
+        { fileExtension: 'yml', name: 'yaml', mode: 'yaml', icon: 'fas fa-bars' },
+        { fileExtension: 'dockerfile', name: 'dockerfile', mode: 'dockerfile', icon: 'fab fa-docker' },
     ],
     configurables: [
         'electricChars', // boolean; [true] = reindent automatically when specific character is typed, if mode supports
