@@ -108,6 +108,10 @@ export default {
         });
         FileSaver.saveAs(blob, `file.${options.mode.fileExtension}`);
       });
+
+      EventBus.$on('file-loaded', contents => {
+        this.cmEditor.setValue(contents);
+      })
     }
   }
 };

@@ -30,7 +30,7 @@
           </a>
         </li>
         <li>
-          <input type="file" name="file-loader" id="file-loader" class="file-loader-hidden">
+          <input type="file" name="file-loader" id="file-loader" class="file-loader-hidden" @change="loadFile">
           <label for="file-loader" class="file-loader-button">Open file</label>
         </li>
         <li>
@@ -140,6 +140,16 @@ export default {
     Editor
   },
   methods: {
+    loadFile(event) {
+      let file = event.target.files[0];
+      if (file) {
+        let reader = new FileReader();
+        reader.onload = () => {
+          EventBus.$emit('file-loaded', reader.result);
+        }
+        reader.readAsText(file);
+      }
+    },
     getDefaultSettingsString() {
       let defaultConfigurables = {};
       // Only configurable settings
@@ -217,7 +227,7 @@ export default {
       // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
     },
-    setMode(mode) { 
+    setMode(mode) {
       this.mode = mode;
       EventBus.$emit("set-mode", mode.mode); // Event used by main editor to set mode
     },
