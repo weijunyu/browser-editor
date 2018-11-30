@@ -27,6 +27,9 @@ export default {
         'autoCloseBrackets', // from addon/edit/closebrackets.js
         'styleActiveLine' // from addon/selection/active-line.js
     ],
+    strings: {
+        dragAndDropTooltip: 'You can also drag and drop files into the editor'
+    },
     themes: {
         light: [
             '3024-day',

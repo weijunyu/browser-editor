@@ -7,6 +7,8 @@ import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
 import '@fortawesome/fontawesome-free/css/solid.min.css';
 import '@fortawesome/fontawesome-free/css/brands.min.css';
 
+import 'tippy.js/dist/tippy.css';
+
 // Main import + modes
 import "codemirror/mode/dockerfile/dockerfile";
 import "codemirror/mode/javascript/javascript"; // also for json & typescript

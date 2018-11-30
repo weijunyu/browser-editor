@@ -100,6 +100,7 @@
 
 <script>
 import CodeMirror from "codemirror";
+import tippy from "tippy.js";
 import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 import config from "./config";
@@ -145,8 +146,8 @@ export default {
       if (file) {
         let reader = new FileReader();
         reader.onload = () => {
-          EventBus.$emit('file-loaded', reader.result);
-        }
+          EventBus.$emit("file-loaded", reader.result);
+        };
         reader.readAsText(file);
       }
     },
@@ -298,6 +299,12 @@ export default {
     });
     EventBus.$on("new-settings-available", () => {
       this.currentSettingsInvalid = false;
+    });
+  },
+  mounted() {
+    tippy(".file-loader-button", {
+      content: config.strings.dragAndDropTooltip,
+      placement: "right"
     });
   }
 };
