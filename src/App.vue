@@ -199,20 +199,8 @@ export default {
       }
     },
     isMenuActive(menuType) {
-      switch (menuType) {
-        case "settings": {
-          return this.showSettings;
-        }
-        case "themes": {
-          return this.showThemes;
-        }
-        case "modes": {
-          return this.showModes;
-        }
-        default: {
-          return false;
-        }
-      }
+      // this.showSettings/this.showThemes etc
+      return this[config.menus[menuType]];
     },
     isThemeActive(themeName) {
       return this.theme === themeName;
