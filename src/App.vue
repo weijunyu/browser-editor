@@ -3,37 +3,50 @@
     <nav class="sidebar" :style="sidebarStyle">
       <ul>
         <li>
+          <!-- outer: a element is flex with justified content -->
           <a @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
-            <span>
-              <i class="fas fa-code"></i>&nbsp;Mode
-            </span>
+            <!-- outer: div is left-aligned in parent a -->
+            <div>
+              <!-- inner: div contains centerd icon -->
+              <div>
+                <i class="fas fa-code"></i>
+              </div>
+              <!-- inner: actual text -->
+              &nbsp;mode
+            </div>
             <i class="fas fa-angle-right" v-if="!showModes && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showModes && showSidebar"></i>
           </a>
         </li>
         <li>
           <a @click="showMenu('themes')" :class="{active: isMenuActive('themes')}">
-            <span>
-              <i class="fas fa-palette"></i>&nbsp;Theme
-            </span>
+            <div>
+              <div>
+                <i class="fas fa-palette"></i>
+              </div>&nbsp;theme
+            </div>
             <i class="fas fa-angle-right" v-if="!showThemes && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showThemes && showSidebar"></i>
           </a>
         </li>
         <li>
           <a @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
-            <span>
-              <i class="fas fa-cogs"></i>&nbsp;Settings
-            </span>
+            <div>
+              <div>
+                <i class="fas fa-cogs"></i>
+              </div>&nbsp;settings
+            </div>
             <i class="fas fa-angle-right" v-if="!showSettings && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
           </a>
         </li>
         <li>
           <a @click="showMenu('help')" :class="{active: isMenuActive('help')}">
-            <span>
-              <i class="fas fa-info"></i>&nbsp;Help
-            </span>
+            <div>
+              <div>
+                <i class="fas fa-info"></i>
+              </div>&nbsp;help
+            </div>
             <i class="fas fa-angle-right" v-if="!showHelp && showSidebar"></i>
             <i class="fas fa-angle-left" v-if="showHelp && showSidebar"></i>
           </a>
@@ -46,10 +59,10 @@
             class="file-loader-hidden"
             @change="loadFile"
           >
-          <label for="file-loader" class="file-loader-button">Open file</label>
+          <label for="file-loader" class="file-loader-button">open file</label>
         </li>
         <li>
-          <a @click="emitSaveFileEvent">Save file</a>
+          <a @click="emitSaveFileEvent">save file</a>
         </li>
       </ul>
       <button class="sidebar-button" type="button" @click="toggleSidebar">
@@ -364,7 +377,26 @@ export default {
 }
 
 .sidebar ul li a,
-.menu a,
+.menu ul li a,
+.file-loader-button,
+.tippy-content {
+  font-family: monospace;
+}
+
+/* left div containing icon and item name */
+.sidebar ul li a > div {
+  display: flex;
+  align-items: center;
+}
+/* div containing icon i element */
+.sidebar ul li a > div > div {
+  display: flex;
+  min-width: 24px;
+  justify-content: space-around;
+}
+
+.sidebar ul li a,
+.menu ul li a,
 a:hover,
 a:focus {
   color: inherit;
