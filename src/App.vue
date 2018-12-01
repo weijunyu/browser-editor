@@ -112,6 +112,7 @@ let cmOptionsMainEditor = {
   mode: initialMode.mode,
   lineNumbers: true,
   styleActiveLine: true,
+  matchBrackets: true,
   extraKeys: {
     Tab: function(cm) {
       let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
