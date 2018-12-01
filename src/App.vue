@@ -3,7 +3,7 @@
     <nav class="sidebar" :style="sidebarStyle">
       <ul>
         <li>
-          <a href="#" @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
+          <a @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
             <span>
               <i class="fas fa-code"></i>&nbsp;Mode
             </span>
@@ -12,7 +12,7 @@
           </a>
         </li>
         <li>
-          <a href="#" @click="showMenu('themes')" :class="{active: isMenuActive('themes')}">
+          <a @click="showMenu('themes')" :class="{active: isMenuActive('themes')}">
             <span>
               <i class="fas fa-palette"></i>&nbsp;Theme
             </span>
@@ -21,7 +21,7 @@
           </a>
         </li>
         <li>
-          <a href="#" @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
+          <a @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
             <span>
               <i class="fas fa-cogs"></i>&nbsp;Settings
             </span>
@@ -30,11 +30,16 @@
           </a>
         </li>
         <li>
+          <a>
+            Help
+          </a>
+        </li>
+        <li>
           <input type="file" name="file-loader" id="file-loader" class="file-loader-hidden" @change="loadFile">
           <label for="file-loader" class="file-loader-button">Open file</label>
         </li>
         <li>
-          <a href="#" @click="emitSaveFileEvent">Save file</a>
+          <a @click="emitSaveFileEvent">Save file</a>
         </li>
       </ul>
       <button class="sidebar-button" type="button" @click="toggleSidebar">
@@ -48,7 +53,7 @@
       <div v-if="showModes" class="editor-wrapper menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
-            <a href="#" @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
+            <a @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
               {{mode.name}}
               <i :class="mode.icon"></i>
             </a>
@@ -59,7 +64,7 @@
       <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
         <ul>
           <li v-for="(theme, index) in allThemes" :key="index">
-            <a href="#" @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
+            <a @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
               {{theme}}
               <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
               <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
@@ -351,7 +356,7 @@ export default {
 }
 
 .sidebar ul li a:hover,
-.file-loader-button:hover,
+.sidebar ul li .file-loader-button:hover,
 .sidebar ul li a.active {
   color: #3a405a;
   background: #eef0f2;
@@ -363,6 +368,7 @@ export default {
 .menu ul li a.active {
   color: #444a61;
   background: #eef0f2;
+  cursor: pointer;
 }
 
 .sidebar ul li a,
