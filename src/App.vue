@@ -71,14 +71,16 @@
       </button>
     </nav>
     <div class="content">
-      <!-- Order matters! Contents are arranged using flexbox. -->
+      <!-- Flex. Order matters! Place all menu/settings before main editor. -->
       <!-- Modes -->
       <div v-if="showModes" class="editor-wrapper menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
             <a @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
               {{mode.name}}
-              <i :class="mode.icon"></i>
+              <div class="menu-icon">
+                <i :class="mode.icon"></i>
+              </div>
             </a>
           </li>
         </ul>
@@ -89,8 +91,10 @@
           <li v-for="(theme, index) in allThemes" :key="index">
             <a @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
               {{theme}}
-              <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
-              <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
+              <div class="menu-icon">
+                <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
+                <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
+              </div>
             </a>
           </li>
         </ul>
@@ -118,6 +122,9 @@
           v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
         ></Editor>
       </div>
+      <div class="editor-wrapper menu" id="help-content" v-if="showHelp">
+        <div v-html="readmeHtmlString"></div>
+      </div>
       <!-- Main Editor -->
       <div class="editor-wrapper">
         <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
@@ -132,6 +139,7 @@ import tippy from "tippy.js";
 import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 import config from "./config";
+import readmeHtmlString from "../README.md"; // Loaded and transformed using markdown-loader and html-loader
 
 // Main Editor initial settings
 let initialTheme = "darcula";
@@ -158,12 +166,13 @@ export default {
       allModes: config.modes,
       cmOptionsMainEditor,
       currentSettingsInvalid: false,
+      mode: initialMode,
+      readmeHtmlString: readmeHtmlString,
       showHelp: false,
       showModes: false,
       showSettings: false,
-      showThemes: false,
       showSidebar: true,
-      mode: initialMode,
+      showThemes: false,
       theme: initialTheme
     };
   },
@@ -327,10 +336,11 @@ export default {
   display: flex;
   align-items: stretch;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100vh; /* stretch out elements*/
+  max-height: 100vh; /* but don't allow them to be forced out of the viewport height */
 }
 
-/* Sidebar */
+/* Sidebar and menus */
 .sidebar,
 .menu {
   min-width: 200px;
@@ -342,6 +352,12 @@ export default {
   font-size: 1.2em;
   position: relative;
   border: 0.5px solid #3a405a;
+}
+
+/* Secondary menus with lighter backgrounds */
+.menu {
+  background: #444a61;
+  overflow: auto; /* will spawn vertical scrollbar for long menus */
 }
 
 .sidebar ul,
@@ -383,13 +399,21 @@ export default {
   font-family: monospace;
 }
 
-/* left div containing icon and item name */
+/* sidebar left div containing icon and item name */
 .sidebar ul li a > div {
   display: flex;
   align-items: center;
 }
-/* div containing icon i element */
+
+/* sidebar div containing icon i element */
 .sidebar ul li a > div > div {
+  display: flex;
+  min-width: 24px;
+  justify-content: space-around;
+}
+
+/* menu right div containing icon */
+div.menu-icon {
   display: flex;
   min-width: 24px;
   justify-content: space-around;
@@ -404,7 +428,7 @@ a:focus {
   transition: all 0.3s;
 }
 
-/* Main content*/
+/* Main content */
 .content {
   flex: 1 1 auto;
   position: relative;
@@ -455,12 +479,6 @@ a:focus {
 #editor-default-settings-name {
   background-color: #3a405a;
   color: #eef0f2;
-}
-
-/* Themes and modes menu */
-.menu {
-  flex: 0 1 auto;
-  background: #444a61;
 }
 
 /* Shrinking sidebar */
