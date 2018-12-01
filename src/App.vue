@@ -30,12 +30,22 @@
           </a>
         </li>
         <li>
-          <a>
-            Help
+          <a @click="showMenu('help')" :class="{active: isMenuActive('help')}">
+            <span>
+              <i class="fas fa-info"></i>&nbsp;Help
+            </span>
+            <i class="fas fa-angle-right" v-if="!showHelp && showSidebar"></i>
+            <i class="fas fa-angle-left" v-if="showHelp && showSidebar"></i>
           </a>
         </li>
         <li>
-          <input type="file" name="file-loader" id="file-loader" class="file-loader-hidden" @change="loadFile">
+          <input
+            type="file"
+            name="file-loader"
+            id="file-loader"
+            class="file-loader-hidden"
+            @change="loadFile"
+          >
           <label for="file-loader" class="file-loader-button">Open file</label>
         </li>
         <li>
@@ -135,6 +145,7 @@ export default {
       allModes: config.modes,
       cmOptionsMainEditor,
       currentSettingsInvalid: false,
+      showHelp: false,
       showModes: false,
       showSettings: false,
       showThemes: false,
@@ -152,6 +163,7 @@ export default {
       if (file) {
         let reader = new FileReader();
         reader.onload = () => {
+          // Main Editor component listens to this event and set its value to file contents
           EventBus.$emit("file-loaded", reader.result);
         };
         reader.readAsText(file);
@@ -170,28 +182,20 @@ export default {
     toggleSidebar() {
       this.showSidebar = !this.showSidebar;
     },
+    /**
+     * Opens/hides the specified menu
+     * @param {string} menuType settings/themes/modes/help
+     */
     showMenu(menuType) {
-      switch (menuType) {
-        case "settings":
-          this.showSettings = !this.showSettings;
-          this.showThemes = false;
-          this.showModes = false;
-          break;
-        case "themes":
-          this.showThemes = !this.showThemes;
-          this.showSettings = false;
-          this.showModes = false;
-          break;
-        case "modes":
-          this.showModes = !this.showModes;
-          this.showSettings = false;
-          this.showThemes = false;
-          break;
-        default:
-          this.showModes = false;
-          this.showSettings = false;
-          this.showThemes = false;
-          throw new Error("Menu Type not recognized!");
+      let menuSettings = config.menus;
+      // Toggle menuType display: this.showSettings/this.showThemes etc
+      this[menuSettings[menuType]] = !this[menuSettings[menuType]];
+      // Hide all other menus
+      let menuSettingsKeys = Object.keys(menuSettings);
+      for (let setting of menuSettingsKeys) {
+        if (menuType !== setting) {
+          this[menuSettings[setting]] = false;
+        }
       }
     },
     isMenuActive(menuType) {

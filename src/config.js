@@ -12,6 +12,12 @@ export default {
         { fileExtension: 'yml', name: 'yaml', mode: 'yaml', icon: 'fas fa-bars' },
         { fileExtension: 'dockerfile', name: 'dockerfile', mode: 'dockerfile', icon: 'fab fa-docker' },
     ],
+    menus: {
+        settings: "showSettings",
+        themes: "showThemes",
+        modes: "showModes",
+        help: "showHelp"
+    },
     configurables: [
         'electricChars', // boolean; [true] = reindent automatically when specific character is typed, if mode supports
         'indentUnit', // integer; [2] How many spaces a block (whatever that means in the edited language) should be indented. The default is 2.
