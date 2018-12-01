@@ -73,7 +73,7 @@
     <div class="content">
       <!-- Flex. Order matters! Place all menu/settings before main editor. -->
       <!-- Modes -->
-      <div v-if="showModes" class="editor-wrapper menu" id="modes-menu">
+      <div v-if="showModes" class="menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
             <a @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
@@ -86,7 +86,7 @@
         </ul>
       </div>
       <!-- Themes -->
-      <div v-if="showThemes" class="editor-wrapper menu" id="themes-menu">
+      <div v-if="showThemes" class="menu" id="themes-menu">
         <ul>
           <li v-for="(theme, index) in allThemes" :key="index">
             <a @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
@@ -122,7 +122,7 @@
           v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
         ></Editor>
       </div>
-      <div class="editor-wrapper menu" id="help-content" v-if="showHelp">
+      <div class="help-content" v-if="showHelp">
         <div v-html="readmeHtmlString"></div>
       </div>
       <!-- Main Editor -->
@@ -426,6 +426,19 @@ a:focus {
   color: inherit;
   text-decoration: none;
   transition: all 0.3s;
+}
+
+.help-content {
+  flex: 1 1 0;
+  padding: 0px 15px;
+  overflow: auto;
+  background: #444a61;
+  color: #eef0f2;
+  font-family: sans-serif;
+}
+
+.help-content code {
+  color: #7afdd6;
 }
 
 /* Main content */

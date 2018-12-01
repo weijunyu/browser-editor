@@ -17,23 +17,23 @@ Can be packed into 1 single html file and run on a browser for air-gapped enviro
 ## Developing
 ### Project setup
 ```
-npm install
+$ npm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+$ npm run serve
 ```
 
 ### Compiles and minifies for production
 The generated production files will be located under `dist/`.
 ```
-npm run build
+$ npm run build
 ```
 
 ### Build and run on Docker
 ```
-npm run build
-docker build --tag ${IMAGE_TAG} .
-docker run --name ${CONTAINER_NAME} -d [-p ${HOST_PORT}:${CONTAINER_PORT}] ${IMAGE_TAG}
+$ npm run build
+$ docker build --tag ${IMAGE_TAG} .
+$ docker run --name ${CONTAINER_NAME} -d [-p ${HOST_PORT}:${CONTAINER_PORT}] ${IMAGE_TAG}
 ```
