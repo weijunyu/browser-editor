@@ -122,8 +122,15 @@
           v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
         ></Editor>
       </div>
+      <!-- Help -->
       <div class="help-content" v-if="showHelp">
         <div v-html="readmeHtmlString"></div>
+        <footer>
+          <a :href="packageInfo.repository.url">
+            <i class="fab fa-github"></i>
+            v{{packageInfo.version}}
+          </a>
+        </footer>
       </div>
       <!-- Main Editor -->
       <div class="editor-wrapper">
@@ -139,6 +146,7 @@ import tippy from "tippy.js";
 import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 import config from "./config";
+import packageInfo from "../package.json";
 import readmeHtmlString from "../README.md"; // Loaded and transformed using markdown-loader and html-loader
 
 // Main Editor initial settings
@@ -167,12 +175,13 @@ export default {
       cmOptionsMainEditor,
       currentSettingsInvalid: false,
       mode: initialMode,
-      readmeHtmlString: readmeHtmlString,
+      readmeHtmlString,
       showHelp: false,
       showModes: false,
       showSettings: false,
       showSidebar: true,
       showThemes: false,
+      packageInfo,
       theme: initialTheme
     };
   },
@@ -229,19 +238,6 @@ export default {
     },
     isModeActive(modeName) {
       return this.mode.name === modeName;
-    },
-    getThemeOptionStyle(index) {
-      if (0 <= index && index < 4) {
-        return {
-          "background-color": "#eef0f2",
-          color: "#3a405a"
-        };
-      } else {
-        return {
-          "background-color": "#3a405a",
-          color: "#eef0f2"
-        };
-      }
     },
     setTheme(themeName) {
       this.theme = themeName;
@@ -434,10 +430,15 @@ a:focus {
   overflow: auto;
   background: #444a61;
   color: #eef0f2;
-  font-family: sans-serif;
+  font-family: monospace;
+}
+
+.help-content a {
+  color: #eef0f2;
 }
 
 .help-content code {
+  font-size: 85%;
   color: #7afdd6;
 }
 
