@@ -5,14 +5,33 @@ Purely in-browser text editor, built together with [CodeMirror](https://codemirr
 Can be packed into 1 single html file and run on a browser for air-gapped environments without easy access to a text editor and doesn't play nice with .js files.
 
 ## Usage
-- Modes provide syntax highlighting.
-- 4 Dark and light themes are provided. Defaults to `darcula`.
-- To change settings for the editor, open the settings menu and change the JSON object under "Current settings". Some common settings:
-    - indentUnit: how many spaces an indent takes up. Also controls the number of spaces added when pressing `tab`. Defaults to `2`.
-    - lineNumbers: shows or hide line numbers. Defaults to `true`.
-    - lineWrapping: scroll or wrap for long lines. Defaults to `false` (scroll).
-    - autoCloseBrackets: add closing brackets automatically. Defaults to `false`.
-    - matchBrackets: highlights matching brackets. Defaults to `true`.
+
+### 1 Modes
+Language modes provide syntax highlighting.
+
+### 2 Themes
+4 Dark and light themes are provided. Defaults to `darcula`.
+
+### 3 Settings
+Edit the JSON object under "Current settings". Some common settings:
+
+- indentUnit: how many spaces an indent takes up. Also controls the number of spaces added when pressing `tab`. Defaults to `2`.
+- lineNumbers: shows or hide line numbers. Defaults to `true`.
+- lineWrapping: scroll or wrap for long lines. Defaults to `false` (scroll).
+- autoCloseBrackets: add closing brackets automatically. Defaults to `false`.
+- matchBrackets: highlights matching brackets. Defaults to `true`.
+
+### 4 Search (regex supported)
+
+`Ctrl-F / Cmd-F`: Start searching
+
+`Ctrl-G / Cmd-G`: Find next
+
+`Shift-Ctrl-G / Shift-Cmd-G`: Find previous
+
+`Shift-Ctrl-F / Cmd-Option-F`: Replace
+
+`Shift-Ctrl-R / Shift-Cmd-Option-F`: Replace all
 
 ## Developing
 ### Project setup
