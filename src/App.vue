@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav class="sidebar" :style="sidebarStyle">
-      <ul>
+      <ul v-show="showSidebar">
         <li>
           <!-- outer: a element is flex with justified content -->
           <a @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
@@ -14,8 +14,8 @@
               <!-- inner: actual text -->
               &nbsp;mode
             </div>
-            <i class="fas fa-angle-right" v-if="!showModes && showSidebar"></i>
-            <i class="fas fa-angle-left" v-if="showModes && showSidebar"></i>
+            <i class="fas fa-angle-right" v-show="!showModes && showSidebar"></i>
+            <i class="fas fa-angle-left" v-show="showModes && showSidebar"></i>
           </a>
         </li>
         <li>
@@ -25,8 +25,8 @@
                 <i class="fas fa-palette"></i>
               </div>&nbsp;theme
             </div>
-            <i class="fas fa-angle-right" v-if="!showThemes && showSidebar"></i>
-            <i class="fas fa-angle-left" v-if="showThemes && showSidebar"></i>
+            <i class="fas fa-angle-right" v-show="!showThemes && showSidebar"></i>
+            <i class="fas fa-angle-left" v-show="showThemes && showSidebar"></i>
           </a>
         </li>
         <li>
@@ -36,8 +36,8 @@
                 <i class="fas fa-cogs"></i>
               </div>&nbsp;settings
             </div>
-            <i class="fas fa-angle-right" v-if="!showSettings && showSidebar"></i>
-            <i class="fas fa-angle-left" v-if="showSettings && showSidebar"></i>
+            <i class="fas fa-angle-right" v-show="!showSettings && showSidebar"></i>
+            <i class="fas fa-angle-left" v-show="showSettings && showSidebar"></i>
           </a>
         </li>
         <li>
@@ -47,8 +47,8 @@
                 <i class="fas fa-info"></i>
               </div>&nbsp;help
             </div>
-            <i class="fas fa-angle-right" v-if="!showHelp && showSidebar"></i>
-            <i class="fas fa-angle-left" v-if="showHelp && showSidebar"></i>
+            <i class="fas fa-angle-right" v-show="!showHelp && showSidebar"></i>
+            <i class="fas fa-angle-left" v-show="showHelp && showSidebar"></i>
           </a>
         </li>
         <li>
@@ -59,10 +59,22 @@
             class="file-loader-hidden"
             @change="loadFile"
           >
-          <label for="file-loader" class="file-loader-button">open file</label>
+          <label for="file-loader" class="file-loader-button menu-button">
+            <div>
+              <div>
+                <i class="fas fa-file"></i>
+              </div>&nbsp;open file
+            </div>
+          </label>
         </li>
         <li>
-          <a @click="emitSaveFileEvent">save file</a>
+          <a @click="emitSaveFileEvent">
+            <div>
+              <div>
+                <i class="fas fa-save"></i>
+              </div>&nbsp;save file
+            </div>
+          </a>
         </li>
       </ul>
       <button class="sidebar-button" type="button" @click="toggleSidebar">
@@ -372,6 +384,13 @@ export default {
   justify-content: space-between;
 }
 
+.sidebar ul li a,
+.menu ul li a,
+.file-loader-button,
+.tippy-content {
+  font-family: monospace;
+}
+
 .sidebar ul li a:hover,
 .sidebar ul li .file-loader-button:hover,
 .sidebar ul li a.active {
@@ -390,19 +409,24 @@ export default {
 
 .sidebar ul li a,
 .menu ul li a,
-.file-loader-button,
-.tippy-content {
-  font-family: monospace;
+.menu-button,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
 }
 
 /* sidebar left div containing icon and item name */
-.sidebar ul li a > div {
+.sidebar ul li a > div,
+.file-loader-button > div {
   display: flex;
   align-items: center;
 }
 
 /* sidebar div containing icon i element */
-.sidebar ul li a > div > div {
+.sidebar ul li a > div > div,
+.file-loader-button > div > div {
   display: flex;
   min-width: 24px;
   justify-content: space-around;
@@ -413,15 +437,6 @@ div.menu-icon {
   display: flex;
   min-width: 24px;
   justify-content: space-around;
-}
-
-.sidebar ul li a,
-.menu ul li a,
-a:hover,
-a:focus {
-  color: inherit;
-  text-decoration: none;
-  transition: all 0.3s;
 }
 
 .help-content {
@@ -500,13 +515,13 @@ a:focus {
   background-color: #5a5987;
   border-radius: 0.15em;
   border: 0.8px solid #eef0f2;
-  bottom: 10px;
   color: #eef0f2;
-  float: right;
   position: absolute;
+  bottom: 10px;
   right: 8px;
   transition: all 0.2s;
 }
+
 .sidebar-button:hover {
   color: #000;
   background-color: #eef0f2;
