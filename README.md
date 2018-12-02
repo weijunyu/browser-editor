@@ -6,13 +6,13 @@ Can be packed into 1 single html file and run on a browser for air-gapped enviro
 
 ## Usage
 
-### 1 Modes
+### Modes
 Language modes provide syntax highlighting.
 
-### 2 Themes
+### Themes
 4 Dark and light themes are provided. Defaults to `darcula`.
 
-### 3 Settings
+### Settings
 Edit the JSON object under "Current settings". Some common settings:
 
 - indentUnit: how many spaces an indent takes up. Also controls the number of spaces added when pressing `tab`. Defaults to `2`.
@@ -21,7 +21,7 @@ Edit the JSON object under "Current settings". Some common settings:
 - autoCloseBrackets: add closing brackets automatically. Defaults to `false`.
 - matchBrackets: highlights matching brackets. Defaults to `true`.
 
-### 4 Search (regex supported)
+### Search (regex supported)
 
 `Ctrl-F / Cmd-F`: Start searching
 
