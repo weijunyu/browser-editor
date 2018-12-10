@@ -1,7 +1,4 @@
-FROM nginx:alpine
+FROM bitnami/nginx:latest
 
-COPY docs /usr/share/nginx/html
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 8080
+# app served at port 8080
+COPY docs /app
