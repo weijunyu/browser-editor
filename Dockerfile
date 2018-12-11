@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-COPY dist /usr/share/nginx/html
+COPY docs /usr/share/nginx/html
 
 # Openshift compatibility commands below
 # support running as arbitrary user which belogs to the root group
