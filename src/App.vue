@@ -224,6 +224,12 @@ export default {
     },
     toggleSidebar() {
       this.showSidebar = !this.showSidebar;
+      if (!this.showSidebar) {
+        this.showModes = false;
+        this.showThemes = false;
+        this.showSettings = false;
+        this.showHelp = false;
+      }
     },
     /**
      * Opens/hides the specified menu
