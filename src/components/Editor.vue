@@ -8,7 +8,7 @@
 import CodeMirror from "codemirror";
 import FileSaver from "file-saver";
 
-import { EventBus } from "../utils";
+import { EventBus, sortObject } from "../utils";
 
 import config from "../config";
 
@@ -67,9 +67,24 @@ export default {
     if (this.editorId === "editor-main") {
       // Initialization for main editor
       this.editorSettings = {};
+      // Populate editorSettings from cmEditor.options
       for (let key of Object.keys(this.cmEditor.options)) {
         if (config.configurables.includes(key)) {
           this.editorSettings[key] = this.cmEditor.getOption(key);
+        }
+      }
+      // If settings exist in localStorage, apply them
+      if (localStorage.getItem("main-editor-settings")) {
+        let storedSettings = JSON.parse(
+          localStorage.getItem("main-editor-settings")
+        );
+        for (let settingName of Object.keys(storedSettings)) {
+          if (
+            storedSettings[settingName] !== this.editorSettings[settingName]
+          ) {
+            this.cmEditor.setOption(settingName, storedSettings[settingName]);
+            this.editorSettings[settingName] = storedSettings[settingName];
+          }
         }
       }
 
@@ -94,6 +109,10 @@ export default {
           ) {
             this.editorSettings[settingName] = mergedSettings[settingName];
             this.cmEditor.setOption(settingName, mergedSettings[settingName]);
+            localStorage.setItem(
+              "main-editor-settings",
+              JSON.stringify(sortObject(this.editorSettings))
+            );
           }
         }
       });
@@ -102,16 +121,16 @@ export default {
         this.cmEditor.setOption("mode", newMode);
       });
 
-      EventBus.$on("save-file", (options) => {
+      EventBus.$on("save-file", options => {
         let blob = new Blob([this.cmEditor.getValue()], {
           type: "text/plain;charset=utf-8"
         });
         FileSaver.saveAs(blob, `file.${options.mode.fileExtension}`);
       });
 
-      EventBus.$on('file-loaded', contents => {
+      EventBus.$on("file-loaded", contents => {
         this.cmEditor.setValue(contents);
-      })
+      });
     }
   }
 };
