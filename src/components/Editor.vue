@@ -31,11 +31,22 @@ export default {
     let cmEditorElement = this.cmEditor.getWrapperElement();
     cmEditorElement.id = `${this.editorId}-element`;
 
-    // When theme is changed
+    // Set theme from localStorage
+    let savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      this.cmEditor.setOption("theme", savedTheme);
+      this.$emit("saved-theme-loaded", savedTheme); // Inform App of change
+    }
+
+    // When theme is changed from sidebar
     EventBus.$on("set-theme", themeName => {
       this.cmEditor.setOption("theme", themeName);
+      localStorage.setItem("theme", themeName);
     });
 
+    /**
+     * Logic specific to current settings editor
+     */
     if (this.editorId === "editor-current-settings") {
       // When mounted, take settings from editor-main
       EventBus.$on("current-settings", currentSettings => {
@@ -51,6 +62,7 @@ export default {
         }
         this.cmEditor.setValue(JSON.stringify(displayedSettings, null, 2));
       });
+      // Tell editor-main to send its current settings
       EventBus.$emit("current-settings-editor-mounted");
 
       // When changing settings
@@ -64,6 +76,9 @@ export default {
       });
     }
 
+    /**
+     * Logic specific to main editor
+     */
     if (this.editorId === "editor-main") {
       // Initialization for main editor
       this.editorSettings = {};
@@ -74,10 +89,9 @@ export default {
         }
       }
       // If settings exist in localStorage, apply them
-      if (localStorage.getItem("main-editor-settings")) {
-        let storedSettings = JSON.parse(
-          localStorage.getItem("main-editor-settings")
-        );
+      let savedSettings = localStorage.getItem("main-editor-settings");
+      if (savedSettings) {
+        let storedSettings = JSON.parse(savedSettings);
         for (let settingName of Object.keys(storedSettings)) {
           if (
             storedSettings[settingName] !== this.editorSettings[settingName]
@@ -117,8 +131,16 @@ export default {
         }
       });
 
+      // Set mode if defined in localStorage
+      let savedMode = localStorage.getItem("mode");
+      if (savedMode) {
+        this.cmEditor.setOption("mode", savedMode);
+        this.$emit("saved-mode-loaded", savedMode); // Inform App of changed mode
+      }
+      // Listen for changes in mode menu
       EventBus.$on("set-mode", newMode => {
         this.cmEditor.setOption("mode", newMode);
+        localStorage.setItem("mode", newMode);
       });
 
       EventBus.$on("save-file", options => {
@@ -130,6 +152,15 @@ export default {
 
       EventBus.$on("file-loaded", contents => {
         this.cmEditor.setValue(contents);
+      });
+
+      let savedContent = localStorage.getItem("main-editor-content");
+      if (savedContent) {
+        this.cmEditor.setValue(savedContent);
+      }
+      window.addEventListener("beforeunload", event => {
+        localStorage.setItem("main-editor-content", this.cmEditor.getValue());
+        event.preventDefault();
       });
     }
   }

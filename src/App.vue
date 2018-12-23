@@ -146,7 +146,12 @@
       </div>
       <!-- Main Editor -->
       <div class="editor-wrapper">
-        <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+        <Editor
+          v-bind:codeMirrorOptions="cmOptionsMainEditor"
+          editorId="editor-main"
+          v-on:saved-theme-loaded="onSavedThemeLoaded"
+          v-on:saved-mode-loaded="onSavedModeLoaded"
+        ></Editor>
       </div>
     </div>
   </div>
@@ -270,6 +275,14 @@ export default {
       EventBus.$emit("save-file", {
         mode: this.mode
       });
+    },
+    onSavedThemeLoaded(themeName) {
+      this.theme = themeName;
+    },
+    onSavedModeLoaded(mode) {
+      this.mode = this.allModes.find(configMode => {
+        return configMode.mode === mode;
+      })
     }
   },
   computed: {
@@ -475,6 +488,7 @@ div.menu-icon {
   position: relative;
   display: flex;
   flex-direction: column;
+  border: 0.5px solid #888888;
 }
 
 .editor-wrapper > p,
