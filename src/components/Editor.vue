@@ -158,10 +158,10 @@ export default {
       if (savedContent) {
         this.cmEditor.setValue(savedContent);
       }
-      window.addEventListener("beforeunload", event => {
+
+      window.onbeforeunload = () => {
         localStorage.setItem("main-editor-content", this.cmEditor.getValue());
-        event.preventDefault();
-      });
+      }
     }
   }
 };
