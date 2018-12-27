@@ -149,8 +149,6 @@
         <Editor
           v-bind:codeMirrorOptions="cmOptionsMainEditor"
           editorId="editor-main"
-          v-on:saved-theme-loaded="onSavedThemeLoaded"
-          v-on:saved-mode-loaded="onSavedModeLoaded"
         ></Editor>
       </div>
     </div>
@@ -160,17 +158,31 @@
 <script>
 import CodeMirror from "codemirror";
 import tippy from "tippy.js";
+import Noty from "noty";
 import Editor from "./components/Editor.vue";
 import { EventBus, sortObject } from "./utils";
 import config from "./config";
 import packageInfo from "../package.json";
 import readmeHtmlString from "../README.md"; // Loaded and transformed using markdown-loader and html-loader
 
+let savedMode = localStorage.getItem("mode");
+let savedTheme = localStorage.getItem("theme");
+let savedSettings = localStorage.getItem("main-editor-settings");
+let savedContent = localStorage.getItem("main-editor-content");
+
+if (savedMode || savedTheme || savedSettings || savedContent) {
+  new Noty({
+    text: "Previous settings and content have been restored.",
+    timeout: 1200,
+    type: 'warning',
+    theme: 'mint'
+  }).show();
+}
+
 // Main Editor initial settings
-let initialTheme = localStorage.getItem("theme") || "darcula";
+let initialTheme = savedTheme || "darcula";
 
 let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
-let savedMode = localStorage.getItem("mode");
 if (savedMode) {
   initialMode = config.modes.find(configMode => {
     return configMode.mode === savedMode;
@@ -554,5 +566,9 @@ div.menu-icon {
   overflow: hidden;
   position: absolute;
   z-index: -1;
+}
+
+.noty_body {
+  font-family: monospace;
 }
 </style>

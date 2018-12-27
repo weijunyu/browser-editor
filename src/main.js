@@ -43,6 +43,9 @@ import "codemirror/theme/dracula.css";
 import "codemirror/theme/hopscotch.css";
 import "codemirror/theme/monokai.css";
 
+import 'noty/lib/noty.css';
+import 'noty/lib/themes/mint.css';
+
 Vue.config.productionTip = false;
 
 new Vue({
