@@ -34,9 +34,9 @@ import "codemirror/addon/search/matchesonscrollbar.css";
 // Main CSS
 import "codemirror/lib/codemirror.css";
 // Themes; see config.js
-import "codemirror/theme/3024-day.css";
 import "codemirror/theme/duotone-light.css";
 import "codemirror/theme/eclipse.css";
+import "codemirror/theme/elegant.css";
 import "codemirror/theme/neo.css";
 import "codemirror/theme/darcula.css";
 import "codemirror/theme/dracula.css";

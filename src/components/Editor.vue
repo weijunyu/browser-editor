@@ -31,13 +31,6 @@ export default {
     let cmEditorElement = this.cmEditor.getWrapperElement();
     cmEditorElement.id = `${this.editorId}-element`;
 
-    // Set theme from localStorage
-    let savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      this.cmEditor.setOption("theme", savedTheme);
-      this.$emit("saved-theme-loaded", savedTheme); // Inform App of change
-    }
-
     // When theme is changed from sidebar
     EventBus.$on("set-theme", themeName => {
       this.cmEditor.setOption("theme", themeName);
@@ -131,13 +124,6 @@ export default {
         }
       });
 
-      // Set mode if defined in localStorage
-      let savedMode = localStorage.getItem("mode");
-      if (savedMode) {
-        this.cmEditor.setOption("mode", savedMode);
-        this.$emit("saved-mode-loaded", savedMode); // Inform App of changed mode
-      }
-      // Listen for changes in mode menu
       EventBus.$on("set-mode", newMode => {
         this.cmEditor.setOption("mode", newMode);
         localStorage.setItem("mode", newMode);

@@ -38,9 +38,9 @@ export default {
     },
     themes: {
         light: [
-            '3024-day',
             'duotone-light',
             'eclipse',
+            'elegant',
             'neo',
         ],
         dark: [

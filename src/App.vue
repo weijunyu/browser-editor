@@ -167,8 +167,16 @@ import packageInfo from "../package.json";
 import readmeHtmlString from "../README.md"; // Loaded and transformed using markdown-loader and html-loader
 
 // Main Editor initial settings
-let initialTheme = "darcula";
+let initialTheme = localStorage.getItem("theme") || "darcula";
+
 let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
+let savedMode = localStorage.getItem("mode");
+if (savedMode) {
+  initialMode = config.modes.find(configMode => {
+    return configMode.mode === savedMode;
+  });
+}
+
 let cmOptionsMainEditor = {
   mode: initialMode.mode,
   lineNumbers: true,
@@ -275,14 +283,6 @@ export default {
       EventBus.$emit("save-file", {
         mode: this.mode
       });
-    },
-    onSavedThemeLoaded(themeName) {
-      this.theme = themeName;
-    },
-    onSavedModeLoaded(mode) {
-      this.mode = this.allModes.find(configMode => {
-        return configMode.mode === mode;
-      })
     }
   },
   computed: {
