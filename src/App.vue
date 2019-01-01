@@ -77,10 +77,32 @@
           </a>
         </li>
       </ul>
-      <button class="sidebar-button" type="button" @click="toggleSidebar">
-        <i class="fas fa-angle-left" v-if="showSidebar"></i>
-        <i class="fas fa-angle-right" v-if="!showSidebar"></i>
-      </button>
+      <div class="sidebar-bottom">
+        <div id="compress-contents-button">
+          <button
+            type="button"
+            class="sidebar-bottom-button"
+            @click="compressContents"
+            v-bind:disabled="!isModeXmlOrJson"
+          >
+            <i class="fas fa-compress-arrows-alt"></i>
+          </button>
+        </div>
+        <div id="expand-contents-button">
+          <button
+            type="button"
+            class="sidebar-bottom-button"
+            @click="expandContents"
+            v-bind:disabled="!isModeXmlOrJson"
+          >
+            <i class="fas fa-expand-arrows-alt"></i>
+          </button>
+        </div>
+        <button class="sidebar-bottom-button" type="button" @click="toggleSidebar">
+          <i class="fas fa-angle-left" v-if="showSidebar"></i>
+          <i class="fas fa-angle-right" v-if="!showSidebar"></i>
+        </button>
+      </div>
     </nav>
     <div class="content">
       <!-- Flex. Order matters! Place all menu/settings before main editor. -->
@@ -146,10 +168,7 @@
       </div>
       <!-- Main Editor -->
       <div class="editor-wrapper">
-        <Editor
-          v-bind:codeMirrorOptions="cmOptionsMainEditor"
-          editorId="editor-main"
-        ></Editor>
+        <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
       </div>
     </div>
   </div>
@@ -174,8 +193,8 @@ if (savedMode || savedTheme || savedSettings || savedContent) {
   new Noty({
     text: "Previous settings and content have been restored.",
     timeout: 1200,
-    type: 'warning',
-    theme: 'mint'
+    type: "warning",
+    theme: "mint"
   }).show();
 }
 
@@ -286,15 +305,27 @@ export default {
       this.theme = themeName;
       // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
+      this.showThemes = false;
     },
     setMode(mode) {
       this.mode = mode;
       EventBus.$emit("set-mode", mode.mode); // Event used by main editor to set mode
+      this.showModes = false;
     },
     emitSaveFileEvent() {
       EventBus.$emit("save-file", {
         mode: this.mode
       });
+    },
+    compressContents() {
+      if (this.mode.name === "xml" || this.mode.name === "json") {
+        EventBus.$emit("compress-contents", this.mode.name);
+      }
+    },
+    expandContents() {
+      if (this.mode.name === "xml" || this.mode.name === "json") {
+        EventBus.$emit("expand-contents", this.mode.name);
+      }
     }
   },
   computed: {
@@ -305,19 +336,20 @@ export default {
         };
       } else {
         return {
-          "margin-left": "-160px"
+          "margin-left": "-162px",
+          "flex-direction": "column-reverse"
         };
       }
     },
     currentSettingsStyle() {
       if (!this.currentSettingsInvalid) {
         return {
-          "background-color": "#9dbf9e"
+          "background-color": "var(--color-success)"
         };
       } else {
         return {
-          "background-color": "#FB3640",
-          color: "#eef0f2"
+          "background-color": "var(--color-fail)",
+          color: "var(--color-light-main)"
         };
       }
     },
@@ -349,6 +381,9 @@ export default {
         },
         theme: this.theme
       };
+    },
+    isModeXmlOrJson() {
+      return this.mode.name === "xml" || this.mode.name === "json";
     }
   },
   created() {
@@ -365,11 +400,29 @@ export default {
       content: config.strings.dragAndDropTooltip,
       placement: "right"
     });
+    tippy("#compress-contents-button", {
+      content: config.strings.minifyXmlAndJsonTooltip,
+      placement: "right"
+    });
+    tippy("#expand-contents-button", {
+      content: config.strings.prettyFormatXmlAndJsonTooltip,
+      placement: "right"
+    });
   }
 };
 </script>
 
 <style>
+:root {
+  --color-dark-main: #3a405a;
+  --color-dark-secondary: #444a61;
+  --color-light-main: #eef0f2;
+  --color-fail: #fb3640;
+  --color-success: #9dbf9e;
+  --color-highlight: #7afdd6;
+  --color-disabled: #646464;
+}
+
 #app {
   font-family: sans-serif;
   display: flex;
@@ -379,23 +432,29 @@ export default {
   max-height: 100vh; /* but don't allow them to be forced out of the viewport height */
 }
 
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* Sidebar and menus */
 .sidebar,
 .menu {
   min-width: 200px;
   max-width: 200px;
-  background: #3a405a;
-  color: #eef0f2;
+  background: var(--color-dark-main);
+  color: var(--color-light-main);
   transition: all 0.3s;
   font-family: sans-serif;
   font-size: 1.2em;
   position: relative;
-  border: 0.5px solid #3a405a;
+  border: 0.5px solid var(--color-dark-main);
 }
 
 /* Secondary menus with lighter backgrounds */
 .menu {
-  background: #444a61;
+  background: var(--color-dark-secondary);
   overflow: auto; /* will spawn vertical scrollbar for long menus */
 }
 
@@ -425,16 +484,16 @@ export default {
 .sidebar ul li a:hover,
 .sidebar ul li .file-loader-button:hover,
 .sidebar ul li a.active {
-  color: #3a405a;
-  background: #eef0f2;
+  color: var(--color-dark-main);
+  background: var(--color-light-main);
   cursor: pointer;
 }
 
 /* Menu items have lighter background */
 .menu ul li a:hover,
 .menu ul li a.active {
-  color: #444a61;
-  background: #eef0f2;
+  color: var(--color-dark-secondary);
+  background: var(--color-light-main);
   cursor: pointer;
 }
 
@@ -474,18 +533,18 @@ div.menu-icon {
   flex: 1 1 0;
   padding: 0px 15px;
   overflow: auto;
-  background: #444a61;
-  color: #eef0f2;
+  background: var(--color-dark-secondary);
+  color: var(--color-light-main);
   font-family: monospace;
 }
 
 .help-content a {
-  color: #eef0f2;
+  color: var(--color-light-main);
 }
 
 .help-content code {
   font-size: 85%;
-  color: #7afdd6;
+  color: var(--color-highlight);
 }
 
 /* Main content */
@@ -538,25 +597,37 @@ div.menu-icon {
 
 /* Settings menu */
 #editor-default-settings-name {
-  background-color: #3a405a;
-  color: #eef0f2;
+  background-color: var(--color-dark-main);
+  color: var(--color-light-main);
 }
 
-/* Shrinking sidebar */
-.sidebar-button {
-  background-color: #5a5987;
+/* Sidebar bottom buttons */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sidebar-bottom-button {
+  background-color: var(--color-dark-secondary);
   border-radius: 0.15em;
-  border: 0.8px solid #eef0f2;
-  color: #eef0f2;
-  position: absolute;
-  bottom: 10px;
-  right: 8px;
+  border: 0px solid var(--color-light-main);
+  color: var(--color-light-main);
   transition: all 0.2s;
+  min-width: 36px;
+  margin: 1px;
 }
 
-.sidebar-button:hover {
-  color: #000;
-  background-color: #eef0f2;
+.sidebar-bottom-button:hover {
+  color: var(--color-dark-main);
+  background-color: var(--color-light-main);
+  cursor: pointer;
+}
+
+.sidebar-bottom-button:disabled {
+  color: var(--color-disabled);
+  background-color: var(--color-dark-secondary);
+  cursor: auto;
 }
 
 .file-loader-hidden {

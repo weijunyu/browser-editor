@@ -34,7 +34,9 @@ export default {
         'styleActiveLine' // from addon/selection/active-line.js
     ],
     strings: {
-        dragAndDropTooltip: 'You can directly drag and drop files into the editor'
+        dragAndDropTooltip: 'You can directly drag and drop files into the editor',
+        minifyXmlAndJsonTooltip: 'Minify (XML & JSON modes only)',
+        prettyFormatXmlAndJsonTooltip: 'Pretty formatting (XML & JSON modes only)'
     },
     themes: {
         light: [
