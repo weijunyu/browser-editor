@@ -14,8 +14,11 @@
               <!-- inner: actual text -->
               &nbsp;mode
             </div>
-            <i class="fas fa-angle-right" v-show="!showModes && showSidebar"></i>
-            <i class="fas fa-angle-left" v-show="showModes && showSidebar"></i>
+            <div>
+              <small>{{ mode.name }}</small>&nbsp;
+              <i class="fas fa-angle-right" v-show="!showModes && showSidebar"></i>
+              <i class="fas fa-angle-left" v-show="showModes && showSidebar"></i>
+            </div>
           </a>
         </li>
         <li>
@@ -25,8 +28,11 @@
                 <i class="fas fa-palette"></i>
               </div>&nbsp;theme
             </div>
-            <i class="fas fa-angle-right" v-show="!showThemes && showSidebar"></i>
-            <i class="fas fa-angle-left" v-show="showThemes && showSidebar"></i>
+            <div>
+              <small>{{ theme }}</small>&nbsp;
+              <i class="fas fa-angle-right" v-show="!showThemes && showSidebar"></i>
+              <i class="fas fa-angle-left" v-show="showThemes && showSidebar"></i>
+            </div>
           </a>
         </li>
         <li>
@@ -349,7 +355,7 @@ export default {
       } else {
         return {
           "background-color": "var(--color-fail)",
-          color: "var(--color-light-main)"
+          color: "var(--color-light-primary)"
         };
       }
     },
@@ -414,9 +420,10 @@ export default {
 
 <style>
 :root {
-  --color-dark-main: #3a405a;
+  --color-dark-primary: #3a405a;
   --color-dark-secondary: #444a61;
-  --color-light-main: #eef0f2;
+  --color-light-primary: #eef0f2;
+  --color-light-secondary: #afafaf;
   --color-fail: #fb3640;
   --color-success: #9dbf9e;
   --color-highlight: #7afdd6;
@@ -443,13 +450,13 @@ export default {
 .menu {
   min-width: 200px;
   max-width: 200px;
-  background: var(--color-dark-main);
-  color: var(--color-light-main);
+  background: var(--color-dark-primary);
+  color: var(--color-light-primary);
   transition: all 0.3s;
   font-family: sans-serif;
   font-size: 1.2em;
   position: relative;
-  border: 0.5px solid var(--color-dark-main);
+  border: 0.5px solid var(--color-dark-primary);
 }
 
 /* Secondary menus with lighter backgrounds */
@@ -472,11 +479,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-family: monospace;
 }
 
-.sidebar ul li a,
-.menu ul li a,
-.file-loader-button,
 .tippy-content {
   font-family: monospace;
 }
@@ -484,8 +489,8 @@ export default {
 .sidebar ul li a:hover,
 .sidebar ul li .file-loader-button:hover,
 .sidebar ul li a.active {
-  color: var(--color-dark-main);
-  background: var(--color-light-main);
+  color: var(--color-dark-primary);
+  background: var(--color-light-primary);
   cursor: pointer;
 }
 
@@ -493,7 +498,7 @@ export default {
 .menu ul li a:hover,
 .menu ul li a.active {
   color: var(--color-dark-secondary);
-  background: var(--color-light-main);
+  background: var(--color-light-primary);
   cursor: pointer;
 }
 
@@ -522,6 +527,11 @@ a:focus {
   justify-content: space-around;
 }
 
+/* sidebar div containg current mode/theme */
+.sidebar ul li a > div > small {
+  color: var(--color-light-secondary);
+}
+
 /* menu right div containing icon */
 div.menu-icon {
   display: flex;
@@ -534,12 +544,12 @@ div.menu-icon {
   padding: 0px 15px;
   overflow: auto;
   background: var(--color-dark-secondary);
-  color: var(--color-light-main);
+  color: var(--color-light-primary);
   font-family: monospace;
 }
 
 .help-content a {
-  color: var(--color-light-main);
+  color: var(--color-light-primary);
 }
 
 .help-content code {
@@ -597,8 +607,8 @@ div.menu-icon {
 
 /* Settings menu */
 #editor-default-settings-name {
-  background-color: var(--color-dark-main);
-  color: var(--color-light-main);
+  background-color: var(--color-dark-primary);
+  color: var(--color-light-primary);
 }
 
 /* Sidebar bottom buttons */
@@ -611,16 +621,16 @@ div.menu-icon {
 .sidebar-bottom-button {
   background-color: var(--color-dark-secondary);
   border-radius: 0.15em;
-  border: 0px solid var(--color-light-main);
-  color: var(--color-light-main);
+  border: 0px solid var(--color-light-primary);
+  color: var(--color-light-primary);
   transition: all 0.2s;
   min-width: 36px;
   margin: 1px;
 }
 
 .sidebar-bottom-button:hover {
-  color: var(--color-dark-main);
-  background-color: var(--color-light-main);
+  color: var(--color-dark-primary);
+  background-color: var(--color-light-primary);
   cursor: pointer;
 }
 

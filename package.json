@@ -1,6 +1,13 @@
 {
   "name": "browser-editor",
   "version": "1.3.0",
+  "description": "In-browser text editor",
+  "homepage": "https://github.com/weijunyu/browser-editor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/weijunyu/browser-editor.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -24,10 +31,6 @@
     "html-webpack-inline-source-plugin": "0.0.10",
     "markdown-loader": "^4.0.0",
     "vue-template-compiler": "^2.5.21"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/weijunyu/browser-editor.git"
   },
   "eslintConfig": {
     "root": true,
