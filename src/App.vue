@@ -225,7 +225,10 @@ let cmOptionsMainEditor = {
       cm.replaceSelection(spaces);
     }
   },
-  theme: initialTheme
+  theme: initialTheme,
+  autoCloseBrackets: true,
+  foldGutter: true,
+  gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
 };
 
 export default {

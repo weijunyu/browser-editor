@@ -8,6 +8,7 @@
 import CodeMirror from "codemirror";
 import FileSaver from "file-saver";
 import PrettyData from "pretty-data"; // For XML minification/expansion
+import Noty from "noty";
 const pd = PrettyData.pd;
 
 import { EventBus, sortObject } from "../utils";
@@ -150,25 +151,43 @@ export default {
       EventBus.$on("compress-contents", modeName => {
         let contents = this.cmEditor.getValue();
         let minifiedContents;
-        if (modeName === "json") {
-          minifiedContents = JSON.stringify(JSON.parse(contents));
+        try {
+          if (modeName === "json") {
+            minifiedContents = JSON.stringify(JSON.parse(contents));
+          }
+          if (modeName === "xml") {
+            minifiedContents = pd.xmlmin(contents);
+          }
+          this.cmEditor.setValue(minifiedContents);
+        } catch (exception) {
+          new Noty({
+            text: `Error minifying ${modeName}, please check your syntax!`,
+            timeout: 1200,
+            type: "error",
+            theme: "mint"
+          }).show();
         }
-        if (modeName === "xml") {
-          minifiedContents = pd.xmlmin(contents);
-        }
-        this.cmEditor.setValue(minifiedContents);
       });
 
       EventBus.$on("expand-contents", modeName => {
         let contents = this.cmEditor.getValue();
         let prettyContents;
-        if (modeName === "json") {
-          prettyContents = JSON.stringify(JSON.parse(contents), null, 2);
+        try {
+          if (modeName === "json") {
+            prettyContents = JSON.stringify(JSON.parse(contents), null, 2);
+          }
+          if (modeName === "xml") {
+            prettyContents = pd.xml(contents);
+          }
+          this.cmEditor.setValue(prettyContents);
+        } catch (exception) {
+          new Noty({
+            text: `Error formatting ${modeName}, please check your syntax!`,
+            timeout: 1200,
+            type: "error",
+            theme: "mint"
+          }).show();
         }
-        if (modeName === "xml") {
-          prettyContents = pd.xml(contents);
-        }
-        this.cmEditor.setValue(prettyContents);
       });
 
       window.onbeforeunload = () => {

@@ -31,7 +31,8 @@ export default {
         // addons
         'matchBrackets',
         'autoCloseBrackets', // from addon/edit/closebrackets.js
-        'styleActiveLine' // from addon/selection/active-line.js
+        'styleActiveLine', // from addon/selection/active-line.js
+        'foldGutter'
     ],
     strings: {
         dragAndDropTooltip: 'You can directly drag and drop files into the editor',
