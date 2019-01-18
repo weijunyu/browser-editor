@@ -1,7 +1,6 @@
 let HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 let production = process.env.NODE_ENV === 'production';
-module.exports = {
-    baseUrl: '',
+module.exports = {    
     configureWebpack: config => {
         config.module.rules.push(
             {
