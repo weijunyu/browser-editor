@@ -151,11 +151,10 @@
       </div>
       <!-- Settings: current -->
       <div class="editor-wrapper" v-if="showSettings">
-        <p
-          class="editor-name"
-          id="editor-current-settings-name"
-          :style="currentSettingsStyle"
-        >Current settings</p>
+        <p class="editor-name" id="editor-current-settings-name" :style="currentSettingsStyle">
+          Current settings
+          <button type="button" class="editor-button" @click="resetSettings">Reset</button>
+        </p>
         <Editor
           editorId="editor-current-settings"
           editorName="Current Settings"
@@ -335,6 +334,19 @@ export default {
       if (this.mode.name === "xml" || this.mode.name === "json") {
         EventBus.$emit("expand-contents", this.mode.name);
       }
+    },
+    resetSettings() {
+      let originalSettingsNames = Object.keys(cmOptionsMainEditor).filter(
+        settingName => {
+          return config.configurables.includes(settingName);
+        }
+      );
+      let originalSettings = {};
+      for (let settingName of originalSettingsNames) {
+        originalSettings[settingName] = cmOptionsMainEditor[settingName];
+      }
+      EventBus.$emit("current-settings", originalSettings); // Update current-settings editor
+      EventBus.$emit("new-settings-available", originalSettings); // Update main-editor
     }
   },
   computed: {
@@ -577,6 +589,8 @@ div.menu-icon {
 
 .editor-wrapper > p,
 .editor-wrapper > div {
+  display: flex;
+  justify-content: space-between;
   flex: 1 1 auto;
 }
 
@@ -650,6 +664,22 @@ div.menu-icon {
   overflow: hidden;
   position: absolute;
   z-index: -1;
+}
+
+.editor-button {
+  box-sizing: border-box;
+  background-color: var(--color-dark-secondary);
+  border-radius: 0.15em;
+  border: 0;
+  color: var(--color-light-primary);
+  transition: all 0.2s;
+  margin: 1px 0;
+}
+
+.editor-button:hover {
+  color: var(--color-dark-primary);
+  background-color: var(--color-light-primary);
+  cursor: pointer;
 }
 
 .noty_body {
