@@ -89,7 +89,7 @@
             type="button"
             class="sidebar-bottom-button"
             @click="compressContents"
-            v-bind:disabled="!isModeXmlOrJson"
+            v-if="isModeXmlOrJson"
           >
             <i class="fas fa-compress-arrows-alt"></i>
           </button>
@@ -99,7 +99,7 @@
             type="button"
             class="sidebar-bottom-button"
             @click="expandContents"
-            v-bind:disabled="!isModeXmlOrJson"
+            v-if="isModeXmlOrJson"
           >
             <i class="fas fa-expand-arrows-alt"></i>
           </button>
