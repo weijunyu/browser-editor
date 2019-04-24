@@ -7,7 +7,7 @@
           <a @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
             <!-- outer: div is left-aligned in parent a -->
             <div>
-              <!-- inner: div contains centerd icon -->
+              <!-- inner: div contains centered icon -->
               <div>
                 <i class="fas fa-code"></i>
               </div>
@@ -29,7 +29,7 @@
               </div>&nbsp;theme
             </div>
             <div>
-              <small>{{ theme }}</small>&nbsp;
+              <small style="width: 70px">{{ theme }}</small>&nbsp;
               <i class="fas fa-angle-right" v-show="!showThemes && showSidebar"></i>
               <i class="fas fa-angle-left" v-show="showThemes && showSidebar"></i>
             </div>
@@ -545,6 +545,9 @@ a:focus {
 /* sidebar div containg current mode/theme */
 .sidebar ul li a > div > small {
   color: var(--color-light-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* menu right div containing icon */
