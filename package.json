@@ -26,7 +26,7 @@
     "@fortawesome/fontawesome-free": "^5.8.1",
     "@vue/cli-plugin-babel": "^3.6.0",
     "@vue/cli-plugin-eslint": "^3.6.0",
-    "@vue/cli-service": "^3.6.0",
+    "@vue/cli-service": "^3.9.3",
     "html-loader": "^0.5.5",
     "html-webpack-inline-source-plugin": "0.0.10",
     "markdown-loader": "^5.0.0",
