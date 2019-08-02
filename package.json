@@ -19,7 +19,7 @@
     "file-saver": "^2.0.1",
     "noty": "^3.2.0-beta",
     "pretty-data": "^0.40.0",
-    "tippy.js": "^4.3.0",
+    "tippy.js": "^4.3.5",
     "vue": "^2.6.10"
   },
   "devDependencies": {
