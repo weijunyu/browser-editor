@@ -182,15 +182,7 @@
         ></Editor>
       </div>
       <!-- Help -->
-      <div class="help-content" v-if="showHelp">
-        <div v-html="readmeHtmlString"></div>
-        <footer>
-          <a :href="packageInfo.repository.url">
-            <i class="fab fa-github"></i>
-            v{{packageInfo.version}}
-          </a>
-        </footer>
-      </div>
+      <Help v-if="showHelp" />
       <!-- Main Editor -->
       <div class="editor-wrapper">
         <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
@@ -207,10 +199,9 @@ import { mapActions, mapGetters } from "vuex";
 import Editor from "./Editor.vue";
 import Tabs from "./Tabs.vue";
 import Tab from "./Tab.vue";
+import Help from "./Help.vue";
 import { EventBus, sortObject } from "../utils";
 import config from "../config";
-import packageInfo from "../../package.json";
-import readmeHtmlString from "../../README.md"; // Loaded and transformed using markdown-loader and html-loader
 
 let savedMode = localStorage.getItem("mode");
 let savedTheme = localStorage.getItem("theme");
@@ -262,20 +253,19 @@ export default {
       cmOptionsMainEditor,
       currentSettingsInvalid: false,
       mode: initialMode,
-      readmeHtmlString,
       showHelp: false,
       showModes: false,
       showSettings: false,
       showSidebar: true,
       showThemes: false,
-      packageInfo,
       theme: initialTheme
     };
   },
   components: {
     Editor,
     Tabs,
-    Tab
+    Tab,
+    Help
   },
   methods: {
     ...mapActions(["login", "logout"]),
@@ -495,7 +485,7 @@ export default {
   background: var(--color-dark-primary);
   color: var(--color-light-primary);
   transition: all 0.3s;
-  font-family: monospace;;
+  font-family: monospace;
   font-size: 1.2em;
   position: relative;
   border: 0.5px solid var(--color-dark-primary);
