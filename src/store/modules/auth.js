@@ -7,15 +7,10 @@ export default {
     processing: false
   },
   getters: {
-    isLoggedIn(state) {
-      return !!state.user;
-    },
-    userId(state) {
-      return state.user ? state.user.uid : null;
-    },
-    user(state) {
-      return state.user;
-    }
+    isLoggedIn: state => !!state.user,
+    userId: state => (state.user ? state.user.uid : null),
+    user: state => state.user,
+    processing: state => state.processing
   },
   actions: {
     initializeAuth({ commit, dispatch }) {
