@@ -16,7 +16,7 @@ import { EventBus, sortObject } from "../utils";
 import config from "../config";
 
 export default {
-  name: "editor",
+  name: "cm-editor",
   props: ["codeMirrorOptions", "editorId", "editorName", "initialValue"],
   data: function() {
     return {};
