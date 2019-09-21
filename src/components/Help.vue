@@ -19,7 +19,18 @@ export default {
     return {
       readmeHtmlString,
       packageInfo
-    }
+    };
   }
-}
+};
 </script>
+
+<style scoped>
+footer {
+  min-height: 32px;
+  display: flex;
+  margin-bottom: 4px;
+}
+footer > a {
+  margin-right: 10px;
+}
+</style>
