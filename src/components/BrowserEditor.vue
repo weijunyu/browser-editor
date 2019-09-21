@@ -83,7 +83,13 @@
           </a>
         </li>
         <li v-if="!isLoggedIn">
-          <a @click="login">Log In With Google</a>
+          <a @click="login">
+            <div>
+              <div>
+                <img src="@/assets/btn_google_light_normal_ios.svg" :style="{maxHeight: '19px'}" />
+              </div>&nbsp;Log In
+            </div>
+          </a>
         </li>
         <li v-else>
           <a @click="logout">Log out</a>

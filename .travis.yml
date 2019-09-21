@@ -6,10 +6,6 @@ install:
 script:
   - npm run build
 deploy:
-  provider: pages
-  local_dir: dist
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: true
-  on:
-    branch: master
+  provider: firebase
+  token:
+    secure: "rfV575o85OThJpLhXqs4KLDFdgJF85QsMH7XlBZj0M35wpjVJutPtl283L8ZPTrI3qFkhI4I7sLsOBxDAiJtaILh6uaCuvChDxp7M6J+y990yf3gXZ3SL4zGx9n+2UuzE5B45T8A7Jz5WDHK9UtjLDygU5A4mSbb8ZIbGHKqt1vmJEGz9s4OsHrX+BHGvArhYG1iTS/pc1ZsPRHJpGuOWfFiHmWRWamaDiVCm5SmdpKho95lHOXuwc455dwy7gWpUWpGlWRVwmzh1p0rqaNGyl5YPMdDaHCl4oWpqYAoC2xV8BDwffJjwlZtapA1ohFsAR2GNK0I0XMBxYds2hIJlE0uBSve3lZ0qzdo9eutxTUPWhKqoap69/tV5C72XO1VvwcUhUf/zg2tCs0hQMbjmevULX2ivFKbopAYWX72JdEfcUggCM1gtEjaXbmKgqS5+m77f4+foqtIkqxkg7O2mt+63Tdy1IyHkOUqnDYEUmrLPkBEoJ6WmcLDS2WSO583+GAtDpBaawuHSD9bwk+A+VIf3vIE+hdXENmD4cuUr017M87Pa6h0D+rHR/stDJoG+hYnQcF+lzvCpCQCm9FWZPS3qJSlfu3u1y7E86t/alxsyt9gqdqm6mzRfmEWXafPXDVaRznQVynie0U9u0p1kA879lSbcDRhW5BHUW93K3Y="
