@@ -91,9 +91,17 @@
             </div>
           </a>
         </li>
-        <li v-else>
-          <a @click="logout">Log out</a>
-        </li>
+        <template v-else>
+          <li>
+            <a @click="logout">Log out</a>
+          </li>
+          <li>
+            <Tabs>
+              <Tab>Local</Tab>
+              <Tab>Cloud</Tab>
+            </Tabs>
+          </li>
+        </template>
       </ul>
       <div class="sidebar-bottom">
         <div id="compress-contents-button">
@@ -197,6 +205,8 @@ import tippy from "tippy.js";
 import Noty from "noty";
 import { mapActions, mapGetters } from "vuex";
 import Editor from "./Editor.vue";
+import Tabs from "./Tabs.vue";
+import Tab from "./Tab.vue";
 import { EventBus, sortObject } from "../utils";
 import config from "../config";
 import packageInfo from "../../package.json";
@@ -263,7 +273,9 @@ export default {
     };
   },
   components: {
-    Editor
+    Editor,
+    Tabs,
+    Tab
   },
   methods: {
     ...mapActions(["login", "logout"]),
@@ -483,7 +495,7 @@ export default {
   background: var(--color-dark-primary);
   color: var(--color-light-primary);
   transition: all 0.3s;
-  font-family: sans-serif;
+  font-family: monospace;;
   font-size: 1.2em;
   position: relative;
   border: 0.5px solid var(--color-dark-primary);
@@ -509,7 +521,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: monospace;
 }
 
 .tippy-content {
