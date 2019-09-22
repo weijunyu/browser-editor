@@ -8,9 +8,7 @@ export default {
   },
   getters: {
     isLoggedIn: state => !!state.user,
-    userId: state => (state.user ? state.user.uid : null),
-    user: state => state.user,
-    processing: state => state.processing
+    userId: state => (state.user ? state.user.uid : null)
   },
   actions: {
     initializeAuth({ commit, dispatch }) {

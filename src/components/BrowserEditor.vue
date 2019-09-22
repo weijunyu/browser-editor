@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <nav class="sidebar" :style="sidebarStyle">
-      <ul v-show="showSidebar">
+      <ul v-show="sidebar">
         <li>
           <!-- outer: a element is flex with justified content -->
-          <a @click="showMenu('modes')" :class="{active: isMenuActive('modes')}">
+          <a @click="toggleMenu('modes')" :class="{active: menus.modes}">
             <!-- outer: div is left-aligned in parent a -->
             <div>
               <!-- inner: div contains centered icon -->
@@ -16,13 +16,13 @@
             </div>
             <div>
               <small>{{ mode.name }}</small>&nbsp;
-              <i class="fas fa-angle-right" v-show="!showModes && showSidebar"></i>
-              <i class="fas fa-angle-left" v-show="showModes && showSidebar"></i>
+              <i class="fas fa-angle-right" v-show="!menus.modes && sidebar"></i>
+              <i class="fas fa-angle-left" v-show="menus.modes && sidebar"></i>
             </div>
           </a>
         </li>
         <li>
-          <a @click="showMenu('themes')" :class="{active: isMenuActive('themes')}">
+          <a @click="toggleMenu('themes')" :class="{active: menus.themes}">
             <div>
               <div>
                 <i class="fas fa-palette"></i>
@@ -30,31 +30,31 @@
             </div>
             <div>
               <small style="width: 70px">{{ theme }}</small>&nbsp;
-              <i class="fas fa-angle-right" v-show="!showThemes && showSidebar"></i>
-              <i class="fas fa-angle-left" v-show="showThemes && showSidebar"></i>
+              <i class="fas fa-angle-right" v-show="!menus.themes && sidebar"></i>
+              <i class="fas fa-angle-left" v-show="menus.themes && sidebar"></i>
             </div>
           </a>
         </li>
         <li>
-          <a @click="showMenu('settings')" :class="{active: isMenuActive('settings')}">
+          <a @click="toggleMenu('settings')" :class="{active: menus.settings}">
             <div>
               <div>
                 <i class="fas fa-cogs"></i>
               </div>&nbsp;settings
             </div>
-            <i class="fas fa-angle-right" v-show="!showSettings && showSidebar"></i>
-            <i class="fas fa-angle-left" v-show="showSettings && showSidebar"></i>
+            <i class="fas fa-angle-right" v-show="!menus.settings && sidebar"></i>
+            <i class="fas fa-angle-left" v-show="menus.settings && sidebar"></i>
           </a>
         </li>
         <li>
-          <a @click="showMenu('help')" :class="{active: isMenuActive('help')}">
+          <a @click="toggleMenu('help')" :class="{active: menus.help}">
             <div>
               <div>
                 <i class="fas fa-info"></i>
               </div>&nbsp;help
             </div>
-            <i class="fas fa-angle-right" v-show="!showHelp && showSidebar"></i>
-            <i class="fas fa-angle-left" v-show="showHelp && showSidebar"></i>
+            <i class="fas fa-angle-right" v-show="!menus.help && sidebar"></i>
+            <i class="fas fa-angle-left" v-show="menus.help && sidebar"></i>
           </a>
         </li>
         <li>
@@ -92,6 +92,7 @@
           </a>
         </li>
         <template v-else>
+          <li>Logged in as {{ user.displayName }}</li>
           <li>
             <a @click="logout">Log out</a>
           </li>
@@ -125,15 +126,15 @@
           </button>
         </div>
         <button class="sidebar-bottom-button" type="button" @click="toggleSidebar">
-          <i class="fas fa-angle-left" v-if="showSidebar"></i>
-          <i class="fas fa-angle-right" v-if="!showSidebar"></i>
+          <i class="fas fa-angle-left" v-if="sidebar"></i>
+          <i class="fas fa-angle-right" v-if="!sidebar"></i>
         </button>
       </div>
     </nav>
     <div class="content">
       <!-- Flex. Order matters! Place all menu/settings before main editor. -->
       <!-- Modes -->
-      <div v-if="showModes" class="menu" id="modes-menu">
+      <div v-if="menus.modes" class="menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
             <a @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
@@ -146,7 +147,7 @@
         </ul>
       </div>
       <!-- Themes -->
-      <div v-if="showThemes" class="menu" id="themes-menu">
+      <div v-if="menus.themes" class="menu" id="themes-menu">
         <ul>
           <li v-for="(theme, index) in allThemes" :key="index">
             <a @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
@@ -160,7 +161,7 @@
         </ul>
       </div>
       <!-- Settings: default -->
-      <div class="editor-wrapper" v-if="showSettings">
+      <div class="editor-wrapper" v-if="menus.settings">
         <p class="editor-name" id="editor-default-settings-name">Default settings</p>
         <Editor
           editorId="editor-default-settings"
@@ -170,7 +171,7 @@
         ></Editor>
       </div>
       <!-- Settings: current -->
-      <div class="editor-wrapper" v-if="showSettings">
+      <div class="editor-wrapper" v-if="menus.settings">
         <p class="editor-name" id="editor-current-settings-name" :style="currentSettingsStyle">
           Current settings
           <button type="button" class="editor-button" @click="resetSettings">Reset</button>
@@ -182,7 +183,7 @@
         ></Editor>
       </div>
       <!-- Help -->
-      <Help v-if="showHelp" />
+      <Help v-if="menus.help" />
       <!-- Main Editor -->
       <div class="editor-wrapper">
         <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
@@ -195,7 +196,7 @@
 import CodeMirror from "codemirror";
 import tippy from "tippy.js";
 import Noty from "noty";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Editor from "./Editor.vue";
 import Tabs from "./Tabs.vue";
 import Tab from "./Tab.vue";
@@ -253,11 +254,6 @@ export default {
       cmOptionsMainEditor,
       currentSettingsInvalid: false,
       mode: initialMode,
-      showHelp: false,
-      showModes: false,
-      showSettings: false,
-      showSidebar: true,
-      showThemes: false,
       theme: initialTheme
     };
   },
@@ -268,7 +264,7 @@ export default {
     Help
   },
   methods: {
-    ...mapActions(["login", "logout"]),
+    ...mapActions(["login", "logout", "toggleMenu", "toggleSidebar"]),
     loadFile(event) {
       let file = event.target.files[0];
       if (file) {
@@ -290,35 +286,6 @@ export default {
       }
       return JSON.stringify(sortObject(defaultConfigurables), null, 2);
     },
-    toggleSidebar() {
-      this.showSidebar = !this.showSidebar;
-      if (!this.showSidebar) {
-        this.showModes = false;
-        this.showThemes = false;
-        this.showSettings = false;
-        this.showHelp = false;
-      }
-    },
-    /**
-     * Opens/hides the specified menu
-     * @param {string} menuType settings/themes/modes/help
-     */
-    showMenu(menuType) {
-      let menuSettings = config.menus;
-      // Toggle menuType display: this.showSettings/this.showThemes etc
-      this[menuSettings[menuType]] = !this[menuSettings[menuType]];
-      // Hide all other menus
-      let menuSettingsKeys = Object.keys(menuSettings);
-      for (let setting of menuSettingsKeys) {
-        if (menuType !== setting) {
-          this[menuSettings[setting]] = false;
-        }
-      }
-    },
-    isMenuActive(menuType) {
-      // this.showSettings/this.showThemes etc
-      return this[config.menus[menuType]];
-    },
     isThemeActive(themeName) {
       return this.theme === themeName;
     },
@@ -329,12 +296,12 @@ export default {
       this.theme = themeName;
       // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
-      this.showThemes = false;
+      this.toggleMenu("themes")
     },
     setMode(mode) {
       this.mode = mode;
       EventBus.$emit("set-mode", mode.mode); // Event used by main editor to set mode
-      this.showModes = false;
+      this.toggleMenu("modes");
     },
     emitSaveFileEvent() {
       EventBus.$emit("save-file", {
@@ -366,30 +333,33 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["isLoggedIn", "user"]),
+    ...mapGetters(["isLoggedIn"]),
+    ...mapState({
+      user: state => state.auth.user,
+      menus: state => state.browserEditor.menus,
+      sidebar: state => state.browserEditor.sidebar
+    }),
     sidebarStyle() {
-      if (this.showSidebar) {
+      if (this.sidebar) {
         return {
           "margin-left": 0
         };
-      } else {
-        return {
-          "margin-left": "-162px",
-          "flex-direction": "column-reverse"
-        };
       }
+      return {
+        "margin-left": "-162px",
+        "flex-direction": "column-reverse"
+      };
     },
     currentSettingsStyle() {
       if (!this.currentSettingsInvalid) {
         return {
           "background-color": "var(--color-success)"
         };
-      } else {
-        return {
-          "background-color": "var(--color-fail)",
-          color: "var(--color-light-primary)"
-        };
       }
+      return {
+        "background-color": "var(--color-fail)",
+        color: "var(--color-light-primary)"
+      };
     },
     cmOptionsDefaultSettings() {
       return {
