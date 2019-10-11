@@ -17,7 +17,7 @@
   "dependencies": {
     "codemirror": "^5.49.0",
     "file-saver": "^2.0.2",
-    "firebase": "^6.6.2",
+    "firebase": "^7.2.0",
     "noty": "^3.2.0-beta",
     "pretty-data": "^0.40.0",
     "tippy.js": "^4.3.5",
