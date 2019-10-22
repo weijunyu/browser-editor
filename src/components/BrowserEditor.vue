@@ -82,27 +82,6 @@
             </div>
           </a>
         </li>
-        <li v-if="!isLoggedIn">
-          <a @click="login">
-            <div>
-              <div>
-                <img src="@/assets/btn_google_light_normal_ios.svg" :style="{maxHeight: '19px'}" />
-              </div>&nbsp;Log In
-            </div>
-          </a>
-        </li>
-        <template v-else>
-          <li>Logged in as {{ user.displayName }}</li>
-          <li>
-            <a @click="logout">Log out</a>
-          </li>
-          <li>
-            <Tabs>
-              <Tab>Local</Tab>
-              <Tab>Cloud</Tab>
-            </Tabs>
-          </li>
-        </template>
       </ul>
       <div class="sidebar-bottom">
         <div id="compress-contents-button">
@@ -196,7 +175,7 @@
 import CodeMirror from "codemirror";
 import tippy from "tippy.js";
 import Noty from "noty";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import Editor from "./Editor.vue";
 import Tabs from "./Tabs.vue";
 import Tab from "./Tab.vue";
@@ -264,7 +243,7 @@ export default {
     Help
   },
   methods: {
-    ...mapActions(["login", "logout", "toggleMenu", "toggleSidebar"]),
+    ...mapActions(["toggleMenu", "toggleSidebar"]),
     loadFile(event) {
       let file = event.target.files[0];
       if (file) {
@@ -333,9 +312,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["isLoggedIn"]),
     ...mapState({
-      user: state => state.auth.user,
       menus: state => state.browserEditor.menus,
       sidebar: state => state.browserEditor.sidebar
     }),
