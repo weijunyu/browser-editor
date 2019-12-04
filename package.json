@@ -3,36 +3,23 @@
   "version": "1.4.1",
   "description": "In-browser text editor",
   "homepage": "https://github.com/weijunyu/browser-editor",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/weijunyu/browser-editor.git"
   },
+  "license": "MIT",
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "serve": "vue-cli-service serve"
   },
-  "dependencies": {
-    "codemirror": "^5.49.0",
-    "file-saver": "^2.0.2",
-    "noty": "^3.2.0-beta",
-    "pretty-data": "^0.40.0",
-    "tippy.js": "^5.0.4",
-    "vue": "^2.6.10",
-    "vuex": "^3.1.1"
-  },
-  "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.11.1",
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
-    "html-loader": "^0.5.5",
-    "markdown-loader": "^5.1.0",
-    "vue-template-compiler": "^2.6.10"
-  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
   "eslintConfig": {
-    "root": true,
+    "lintOnSave": true,
     "env": {
       "node": true
     },
@@ -40,21 +27,33 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {
-      "no-console": 0
-    },
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "root": true,
+    "rules": {
+      "no-console": 0
     }
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.1",
+    "@vue/cli-plugin-babel": "^4.1.1",
+    "@vue/cli-plugin-eslint": "^4.1.1",
+    "@vue/cli-service": "^4.1.1",
+    "codemirror": "^5.49.2",
+    "file-saver": "^2.0.2",
+    "html-loader": "^0.5.5",
+    "markdown-loader": "^5.1.0",
+    "noty": "^3.2.0-beta",
+    "pretty-data": "^0.40.0",
+    "tippy.js": "^5.1.2",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.1.2"
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  }
 }
