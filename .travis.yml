@@ -8,10 +8,14 @@ script:
 env:
   - PUBLIC_PATH=/browser-editor/
 deploy:
-  provider: pages
-  local_dir: dist
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: true
-  on:
-    branch: master
+  - provider: pages
+    local_dir: dist
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    on:
+      branch: master
+  - provider: script
+    script: bash deploy/dockerhub.sh
+    on:
+      branch: master
