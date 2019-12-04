@@ -19,28 +19,25 @@
     "not ie <= 8"
   ],
   "eslintConfig": {
-    "lintOnSave": true,
     "env": {
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
+      "plugin:vue/recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
     },
     "root": true,
-    "rules": {
-      "no-console": 0
-    }
+    "rules": {}
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.11.1",
-    "@vue/cli-plugin-babel": "^4.1.1",
-    "@vue/cli-plugin-eslint": "^4.1.1",
     "@vue/cli-service": "^4.1.1",
+    "babel-eslint": "^10.0.3",
     "codemirror": "^5.49.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.0.1",
     "file-saver": "^2.0.2",
     "html-loader": "^0.5.5",
     "markdown-loader": "^5.1.0",

@@ -177,8 +177,6 @@ import tippy from "tippy.js";
 import Noty from "noty";
 import { mapActions, mapState } from "vuex";
 import Editor from "./Editor.vue";
-import Tabs from "./Tabs.vue";
-import Tab from "./Tab.vue";
 import Help from "./Help.vue";
 import { EventBus, sortObject } from "../utils";
 import config from "../config";
@@ -238,8 +236,6 @@ export default {
   },
   components: {
     Editor,
-    Tabs,
-    Tab,
     Help
   },
   methods: {
