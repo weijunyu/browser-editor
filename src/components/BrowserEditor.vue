@@ -175,52 +175,11 @@
 import CodeMirror from "codemirror";
 import tippy from "tippy.js";
 import Noty from "noty";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 import Editor from "./Editor.vue";
 import Help from "./Help.vue";
 import { EventBus, sortObject } from "../utils";
 import config from "../config";
-
-let savedMode = localStorage.getItem("mode");
-let savedTheme = localStorage.getItem("theme");
-let savedSettings = localStorage.getItem("main-editor-settings");
-let savedContent = localStorage.getItem("main-editor-content");
-
-if (savedMode || savedTheme || savedSettings || savedContent) {
-  new Noty({
-    text: "Previous settings and content have been restored.",
-    timeout: 1200,
-    type: "warning",
-    theme: "mint"
-  }).show();
-}
-
-// Main Editor initial settings
-let initialTheme = savedTheme || "darcula";
-
-let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
-if (savedMode) {
-  initialMode = config.modes.find(configMode => {
-    return configMode.mode === savedMode;
-  });
-}
-
-let cmOptionsMainEditor = {
-  mode: initialMode.mode,
-  lineNumbers: true,
-  styleActiveLine: true,
-  matchBrackets: true,
-  extraKeys: {
-    Tab: function(cm) {
-      let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-      cm.replaceSelection(spaces);
-    }
-  },
-  theme: initialTheme,
-  autoCloseBrackets: true,
-  foldGutter: true,
-  gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-};
 
 export default {
   name: "browser-editor",
@@ -228,10 +187,8 @@ export default {
     return {
       allThemes: [...config.themes.light, ...config.themes.dark],
       allModes: config.modes,
-      cmOptionsMainEditor,
-      currentSettingsInvalid: false,
-      mode: initialMode,
-      theme: initialTheme
+      cmOptionsMainEditor: null,
+      currentSettingsInvalid: false
     };
   },
   components: {
@@ -240,6 +197,10 @@ export default {
   },
   methods: {
     ...mapActions(["toggleMenu", "toggleSidebar"]),
+    ...mapMutations({
+      setStoreMode: "setMode",
+      setStoreTheme: "setTheme"
+    }),
     loadFile(event) {
       let file = event.target.files[0];
       if (file) {
@@ -268,14 +229,15 @@ export default {
       return this.mode.name === modeName;
     },
     setTheme(themeName) {
-      this.theme = themeName;
+      this.setStoreTheme(themeName);
       // Use event for main editor to set theme on demand
       EventBus.$emit("set-theme", themeName);
-      this.toggleMenu("themes")
+      this.toggleMenu("themes");
     },
     setMode(mode) {
-      this.mode = mode;
-      EventBus.$emit("set-mode", mode.mode); // Event used by main editor to set mode
+      this.setStoreMode(mode);
+      // Event used by main editor to set mode
+      EventBus.$emit("set-mode", mode.mode);
       this.toggleMenu("modes");
     },
     emitSaveFileEvent() {
@@ -310,7 +272,9 @@ export default {
   computed: {
     ...mapState({
       menus: state => state.browserEditor.menus,
-      sidebar: state => state.browserEditor.sidebar
+      sidebar: state => state.browserEditor.sidebar,
+      mode: state => state.browserEditor.mode,
+      theme: state => state.browserEditor.theme
     }),
     sidebarStyle() {
       if (this.sidebar) {
@@ -368,6 +332,49 @@ export default {
     }
   },
   created() {
+    let savedMode = localStorage.getItem("mode");
+    let savedTheme = localStorage.getItem("theme");
+    let savedSettings = localStorage.getItem("main-editor-settings");
+    let savedContent = localStorage.getItem("main-editor-content");
+
+    if (savedMode || savedTheme || savedSettings || savedContent) {
+      new Noty({
+        text: "Previous settings and content have been restored.",
+        timeout: 1200,
+        type: "warning",
+        theme: "mint"
+      }).show();
+    }
+
+    // Main Editor initial settings
+    let initialTheme = savedTheme || "darcula";
+
+    let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
+    if (savedMode) {
+      initialMode = config.modes.find(configMode => {
+        return configMode.mode === savedMode;
+      });
+    }
+
+    this.setStoreMode(initialMode);
+    this.setStoreTheme(initialTheme);
+
+    this.cmOptionsMainEditor = {
+      mode: initialMode.mode,
+      lineNumbers: true,
+      styleActiveLine: true,
+      matchBrackets: true,
+      extraKeys: {
+        Tab: function(cm) {
+          let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+          cm.replaceSelection(spaces);
+        }
+      },
+      theme: initialTheme,
+      autoCloseBrackets: true,
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    };
     // If current settings is valid JSON or not; fired from current-settings editor.
     EventBus.$on("current-settings-invalid", () => {
       this.currentSettingsInvalid = true;

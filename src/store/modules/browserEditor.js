@@ -1,3 +1,4 @@
+import config from "../../config";
 export default {
   state: {
     menus: {
@@ -6,7 +7,9 @@ export default {
       settings: false,
       help: false
     },
-    sidebar: true
+    sidebar: true,
+    mode: config.modes[0],
+    theme: "darcula"
   },
   getters: {},
   actions: {
@@ -41,6 +44,12 @@ export default {
     },
     toggleSidebar(state) {
       state.sidebar = !state.sidebar;
+    },
+    setMode(state, mode) {
+      state.mode = mode;
+    },
+    setTheme(state, theme) {
+      state.theme = theme;
     }
   }
 };
