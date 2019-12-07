@@ -394,17 +394,6 @@ export default {
 </script>
 
 <style>
-:root {
-  --color-dark-primary: #3a405a;
-  --color-dark-secondary: #444a61;
-  --color-light-primary: #eef0f2;
-  --color-light-secondary: #afafaf;
-  --color-fail: #fb3640;
-  --color-success: #9dbf9e;
-  --color-highlight: #7afdd6;
-  --color-disabled: #646464;
-}
-
 #app {
   font-family: sans-serif;
   display: flex;
