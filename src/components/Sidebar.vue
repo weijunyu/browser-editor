@@ -3,7 +3,7 @@
     <ul v-show="sidebar">
       <li>
         <!-- outer: a element is flex with justified content -->
-        <a @click="toggleMenu('modes')" :class="{active: menus.modes}">
+        <a @click="toggleMenu('modes')" :class="{ active: menus.modes }">
           <!-- outer: div is left-aligned in parent a -->
           <div>
             <!-- inner: div contains centered icon -->
@@ -11,46 +11,52 @@
               <i class="fas fa-code"></i>
             </div>
             <!-- inner: actual text -->
-            &nbsp;mode
+            mode
           </div>
           <div>
-            <small>{{ mode.name }}</small>&nbsp;
+            <small>{{ mode.name }}</small
+            >
             <i class="fas fa-angle-right" v-show="!menus.modes && sidebar"></i>
             <i class="fas fa-angle-left" v-show="menus.modes && sidebar"></i>
           </div>
         </a>
       </li>
       <li>
-        <a @click="toggleMenu('themes')" :class="{active: menus.themes}">
+        <a @click="toggleMenu('themes')" :class="{ active: menus.themes }">
           <div>
             <div>
               <i class="fas fa-palette"></i>
-            </div>&nbsp;theme
+            </div>
+            theme
           </div>
           <div>
-            <small :style="{width: '70px', textAlign: 'right'}">{{ theme }}</small>&nbsp;
+            <small :style="{ width: '70px', textAlign: 'right' }">
+              {{ theme }} </small
+            >
             <i class="fas fa-angle-right" v-show="!menus.themes && sidebar"></i>
             <i class="fas fa-angle-left" v-show="menus.themes && sidebar"></i>
           </div>
         </a>
       </li>
       <li>
-        <a @click="toggleMenu('settings')" :class="{active: menus.settings}">
+        <a @click="toggleMenu('settings')" :class="{ active: menus.settings }">
           <div>
             <div>
               <i class="fas fa-cogs"></i>
-            </div>&nbsp;settings
+            </div>
+            settings
           </div>
           <i class="fas fa-angle-right" v-show="!menus.settings && sidebar"></i>
           <i class="fas fa-angle-left" v-show="menus.settings && sidebar"></i>
         </a>
       </li>
       <li>
-        <a @click="toggleMenu('help')" :class="{active: menus.help}">
+        <a @click="toggleMenu('help')" :class="{ active: menus.help }">
           <div>
             <div>
               <i class="fas fa-info"></i>
-            </div>&nbsp;help
+            </div>
+            help
           </div>
           <i class="fas fa-angle-right" v-show="!menus.help && sidebar"></i>
           <i class="fas fa-angle-left" v-show="menus.help && sidebar"></i>
@@ -68,7 +74,8 @@
           <div>
             <div>
               <i class="fas fa-file"></i>
-            </div>&nbsp;open file
+            </div>
+            open file
           </div>
         </label>
       </li>
@@ -77,7 +84,8 @@
           <div>
             <div>
               <i class="fas fa-save"></i>
-            </div>&nbsp;save file
+            </div>
+            save file
           </div>
         </a>
       </li>
@@ -103,7 +111,11 @@
           <i class="fas fa-expand-arrows-alt"></i>
         </button>
       </div>
-      <button class="sidebar-bottom-button" type="button" @click="toggleSidebar">
+      <button
+        class="sidebar-bottom-button"
+        type="button"
+        @click="toggleSidebar"
+      >
         <i class="fas fa-angle-left" v-if="sidebar"></i>
         <i class="fas fa-angle-right" v-if="!sidebar"></i>
       </button>
@@ -173,3 +185,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.sidebar ul > li > a div > div > i.fas {
+  margin-right: 0.2rem;
+}
+.sidebar ul > li > a div > small {
+  margin-right: 0.2rem;
+}
+</style>
