@@ -9,8 +9,6 @@ jobs:
   build_and_deploy:
     name: Build and deploy to GH Pages
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_PATH: /browser-editor/
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -19,6 +17,8 @@ jobs:
       - run: |
           npm ci
           npm run build
+        env:
+          PUBLIC_PATH: /browser-editor/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
