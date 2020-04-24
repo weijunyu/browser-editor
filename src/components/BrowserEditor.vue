@@ -7,8 +7,11 @@
       <div v-if="menus.modes" class="menu" id="modes-menu">
         <ul>
           <li v-for="(mode, index) in allModes" :key="index">
-            <a @click="setMode(mode)" :class="{active: isModeActive(mode.name)}">
-              {{mode.name}}
+            <a
+              @click="setMode(mode)"
+              :class="{ active: isModeActive(mode.name) }"
+            >
+              {{ mode.name }}
               <div class="menu-icon">
                 <i :class="mode.icon"></i>
               </div>
@@ -20,8 +23,11 @@
       <div v-if="menus.themes" class="menu" id="themes-menu">
         <ul>
           <li v-for="(theme, index) in allThemes" :key="index">
-            <a @click="setTheme(theme)" :class="{active: isThemeActive(theme)}">
-              {{theme}}
+            <a
+              @click="setTheme(theme)"
+              :class="{ active: isThemeActive(theme) }"
+            >
+              {{ theme }}
               <div class="menu-icon">
                 <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
                 <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
@@ -32,7 +38,9 @@
       </div>
       <!-- Settings: default -->
       <div class="editor-wrapper" v-if="menus.settings">
-        <p class="editor-name" id="editor-default-settings-name">Default settings</p>
+        <p class="editor-name" id="editor-default-settings-name">
+          Default settings
+        </p>
         <Editor
           editorId="editor-default-settings"
           editorName="Default settings"
@@ -42,9 +50,15 @@
       </div>
       <!-- Settings: current -->
       <div class="editor-wrapper" v-if="menus.settings">
-        <p class="editor-name" id="editor-current-settings-name" :style="currentSettingsStyle">
+        <p
+          class="editor-name"
+          id="editor-current-settings-name"
+          :style="currentSettingsStyle"
+        >
           Current settings
-          <button type="button" class="editor-button" @click="resetSettings">Reset</button>
+          <button type="button" class="editor-button" @click="resetSettings">
+            Reset
+          </button>
         </p>
         <Editor
           editorId="editor-current-settings"
@@ -56,7 +70,10 @@
       <Help v-if="menus.help" />
       <!-- Main Editor -->
       <div class="editor-wrapper">
-        <Editor v-bind:codeMirrorOptions="cmOptionsMainEditor" editorId="editor-main"></Editor>
+        <Editor
+          v-bind:codeMirrorOptions="cmOptionsMainEditor"
+          editorId="editor-main"
+        ></Editor>
       </div>
     </div>
   </div>
@@ -75,24 +92,24 @@ import config from "../config";
 
 export default {
   name: "browser-editor",
-  data: function() {
+  data: function () {
     return {
       allThemes: [...config.themes.light, ...config.themes.dark],
       allModes: config.modes,
       cmOptionsMainEditor: null,
-      currentSettingsInvalid: false
+      currentSettingsInvalid: false,
     };
   },
   components: {
     Editor,
     Help,
-    Sidebar
+    Sidebar,
   },
   methods: {
     ...mapActions(["toggleMenu"]),
     ...mapMutations({
       setStoreMode: "setMode",
-      setStoreTheme: "setTheme"
+      setStoreTheme: "setTheme",
     }),
     getDefaultSettingsString() {
       let defaultConfigurables = {};
@@ -124,7 +141,7 @@ export default {
     },
     resetSettings() {
       let originalSettingsNames = Object.keys(this.cmOptionsMainEditor).filter(
-        settingName => {
+        (settingName) => {
           return config.configurables.includes(settingName);
         }
       );
@@ -134,55 +151,55 @@ export default {
       }
       EventBus.$emit("current-settings", originalSettings); // Update current-settings editor
       EventBus.$emit("new-settings-available", originalSettings); // Update main-editor
-    }
+    },
   },
   computed: {
     ...mapState({
-      menus: state => state.browserEditor.menus,
-      sidebar: state => state.browserEditor.sidebar,
-      mode: state => state.browserEditor.mode,
-      theme: state => state.browserEditor.theme
+      menus: (state) => state.browserEditor.menus,
+      sidebar: (state) => state.browserEditor.sidebar,
+      mode: (state) => state.browserEditor.mode,
+      theme: (state) => state.browserEditor.theme,
     }),
     currentSettingsStyle() {
       if (!this.currentSettingsInvalid) {
         return {
-          "background-color": "var(--color-success)"
+          "background-color": "var(--color-success)",
         };
       }
       return {
         "background-color": "var(--color-fail)",
-        color: "var(--color-light-primary)"
+        color: "var(--color-light-primary)",
       };
     },
     cmOptionsDefaultSettings() {
       return {
         mode: {
           name: "javascript",
-          json: true
+          json: true,
         },
         lineNumbers: true,
         styleActiveLine: true,
         readOnly: true,
-        theme: this.theme
+        theme: this.theme,
       };
     },
     cmOptionsCurrentSettings() {
       return {
         mode: {
           name: "javascript",
-          json: true
+          json: true,
         },
         lineNumbers: true,
         styleActiveLine: true,
         extraKeys: {
-          Tab: function(cm) {
+          Tab: function (cm) {
             let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
             cm.replaceSelection(spaces);
-          }
+          },
         },
-        theme: this.theme
+        theme: this.theme,
       };
-    }
+    },
   },
   created() {
     let savedMode = localStorage.getItem("mode");
@@ -195,7 +212,7 @@ export default {
         text: "Previous settings and content have been restored.",
         timeout: 1200,
         type: "warning",
-        theme: "mint"
+        theme: "mint",
       }).show();
     }
 
@@ -204,7 +221,7 @@ export default {
 
     let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
     if (savedMode) {
-      initialMode = config.modes.find(configMode => {
+      initialMode = config.modes.find((configMode) => {
         return configMode.mode === savedMode;
       });
     }
@@ -218,15 +235,15 @@ export default {
       styleActiveLine: true,
       matchBrackets: true,
       extraKeys: {
-        Tab: function(cm) {
+        Tab: function (cm) {
           let spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
           cm.replaceSelection(spaces);
-        }
+        },
       },
       theme: initialTheme,
       autoCloseBrackets: true,
       foldGutter: true,
-      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
     };
     // If current settings is valid JSON or not; fired from current-settings editor.
     EventBus.$on("current-settings-invalid", () => {
@@ -239,17 +256,17 @@ export default {
   mounted() {
     tippy(".file-loader-button", {
       content: config.strings.dragAndDropTooltip,
-      placement: "right"
+      placement: "right",
     });
     tippy("#compress-contents-button", {
       content: config.strings.minifyXmlAndJsonTooltip,
-      placement: "right"
+      placement: "right",
     });
     tippy("#expand-contents-button", {
       content: config.strings.prettyFormatXmlAndJsonTooltip,
-      placement: "right"
+      placement: "right",
     });
-  }
+  },
 };
 </script>
 
@@ -276,7 +293,7 @@ export default {
   max-width: 200px;
   background: var(--color-dark-primary);
   color: var(--color-light-primary);
-  transition: all .2s;
+  transition: all 0.2s;
   font-family: monospace;
   font-size: 1.2em;
   position: relative;

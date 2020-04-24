@@ -14,8 +14,7 @@
             mode
           </div>
           <div>
-            <small>{{ mode.name }}</small
-            >
+            <small>{{ mode.name }}</small>
             <i class="fas fa-angle-right" v-show="!menus.modes && sidebar"></i>
             <i class="fas fa-angle-left" v-show="menus.modes && sidebar"></i>
           </div>
@@ -31,8 +30,8 @@
           </div>
           <div>
             <small :style="{ width: '70px', textAlign: 'right' }">
-              {{ theme }} </small
-            >
+              {{ theme }}
+            </small>
             <i class="fas fa-angle-right" v-show="!menus.themes && sidebar"></i>
             <i class="fas fa-angle-left" v-show="menus.themes && sidebar"></i>
           </div>
@@ -132,7 +131,7 @@ export default {
     ...mapActions(["toggleMenu", "toggleSidebar"]),
     ...mapMutations({
       setStoreMode: "setMode",
-      setStoreTheme: "setTheme"
+      setStoreTheme: "setTheme",
     }),
     loadFile(event) {
       let file = event.target.files[0];
@@ -147,7 +146,7 @@ export default {
     },
     emitSaveFileEvent() {
       EventBus.$emit("save-file", {
-        mode: this.mode
+        mode: this.mode,
       });
     },
     compressContents() {
@@ -159,30 +158,30 @@ export default {
       if (this.mode.name === "xml" || this.mode.name === "json") {
         EventBus.$emit("expand-contents", this.mode.name);
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      menus: state => state.browserEditor.menus,
-      sidebar: state => state.browserEditor.sidebar,
-      mode: state => state.browserEditor.mode,
-      theme: state => state.browserEditor.theme
+      menus: (state) => state.browserEditor.menus,
+      sidebar: (state) => state.browserEditor.sidebar,
+      mode: (state) => state.browserEditor.mode,
+      theme: (state) => state.browserEditor.theme,
     }),
     sidebarStyle() {
       if (this.sidebar) {
         return {
-          "margin-left": 0
+          "margin-left": 0,
         };
       }
       return {
         "margin-left": "-162px",
-        "flex-direction": "column-reverse"
+        "flex-direction": "column-reverse",
       };
     },
     isModeXmlOrJson() {
       return this.mode.name === "xml" || this.mode.name === "json";
-    }
-  }
+    },
+  },
 };
 </script>
 

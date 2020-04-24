@@ -5,11 +5,11 @@ export default {
       modes: false,
       themes: false,
       settings: false,
-      help: false
+      help: false,
     },
     sidebar: true,
     mode: config.modes[0],
-    theme: "darcula"
+    theme: "darcula",
   },
   getters: {},
   actions: {
@@ -29,7 +29,7 @@ export default {
     toggleSidebar({ commit, dispatch }) {
       commit("toggleSidebar");
       dispatch("hideAllMenus");
-    }
+    },
   },
   mutations: {
     toggleMenu(state, { menuSetting, showMenu }) {
@@ -39,7 +39,7 @@ export default {
       }
       state.menus = {
         ...state.menus,
-        [menuSetting]: newSetting
+        [menuSetting]: newSetting,
       };
     },
     toggleSidebar(state) {
@@ -50,6 +50,6 @@ export default {
     },
     setTheme(state, theme) {
       state.theme = theme;
-    }
-  }
+    },
+  },
 };

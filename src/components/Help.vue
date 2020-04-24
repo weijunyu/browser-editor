@@ -4,7 +4,7 @@
     <footer>
       <a :href="packageInfo.repository.url">
         <i class="fab fa-github"></i>
-        v{{packageInfo.version}}
+        v{{ packageInfo.version }}
       </a>
     </footer>
   </div>
@@ -18,9 +18,9 @@ export default {
   data() {
     return {
       readmeHtmlString,
-      packageInfo
+      packageInfo,
     };
-  }
+  },
 };
 </script>
 

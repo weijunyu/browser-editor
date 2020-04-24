@@ -1,12 +1,12 @@
-import Vue from 'vue';
-import App from './App.vue';
+import Vue from "vue";
+import App from "./App.vue";
 import store from "./store";
 
-import './styles/normalize.css';
+import "./styles/normalize.css";
 
-import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
-import '@fortawesome/fontawesome-free/css/solid.min.css';
-import '@fortawesome/fontawesome-free/css/brands.min.css';
+import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+import "@fortawesome/fontawesome-free/css/solid.min.css";
+import "@fortawesome/fontawesome-free/css/brands.min.css";
 
 // Main import + modes
 import "codemirror/mode/dockerfile/dockerfile";
@@ -19,7 +19,7 @@ import "codemirror/mode/yaml/yaml";
 // Addons
 import "codemirror/addon/edit/closebrackets"; // For auto close brackets
 import "codemirror/addon/selection/active-line"; // For active line styling
-import 'codemirror/addon/edit/matchbrackets';
+import "codemirror/addon/edit/matchbrackets";
 // Addons for code folding
 import "codemirror/addon/fold/foldcode";
 import "codemirror/addon/fold/foldgutter"; // For gutter markers
@@ -50,14 +50,14 @@ import "codemirror/theme/dracula.css";
 import "codemirror/theme/hopscotch.css";
 import "codemirror/theme/monokai.css";
 
-import 'tippy.js/dist/tippy.css';
+import "tippy.js/dist/tippy.css";
 
-import 'noty/lib/noty.css';
-import 'noty/lib/themes/mint.css';
+import "noty/lib/noty.css";
+import "noty/lib/themes/mint.css";
 
 Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App),
-  store
-}).$mount('#app');
+  render: (h) => h(App),
+  store,
+}).$mount("#app");

@@ -18,7 +18,7 @@ import config from "../config";
 export default {
   name: "cm-editor",
   props: ["codeMirrorOptions", "editorId", "editorName", "initialValue"],
-  data: function() {
+  data: function () {
     return {};
   },
   methods: {},
@@ -35,7 +35,7 @@ export default {
     cmEditorElement.id = `${this.editorId}-element`;
 
     // When theme is changed from sidebar
-    EventBus.$on("set-theme", themeName => {
+    EventBus.$on("set-theme", (themeName) => {
       this.cmEditor.setOption("theme", themeName);
       localStorage.setItem("theme", themeName);
     });
@@ -45,7 +45,7 @@ export default {
      */
     if (this.editorId === "editor-current-settings") {
       // When mounted, take settings from editor-main
-      EventBus.$on("current-settings", currentSettings => {
+      EventBus.$on("current-settings", (currentSettings) => {
         let displayedSettings = {};
         // Only show non-default values, from configurables
         for (let settingName of Object.keys(currentSettings)) {
@@ -104,7 +104,7 @@ export default {
       });
 
       // When current settings editor is changed
-      EventBus.$on("new-settings-available", newSettings => {
+      EventBus.$on("new-settings-available", (newSettings) => {
         // Merge new settings with defaults
         let mergedSettings = Object.assign(
           {},
@@ -127,19 +127,19 @@ export default {
         }
       });
 
-      EventBus.$on("set-mode", newMode => {
+      EventBus.$on("set-mode", (newMode) => {
         this.cmEditor.setOption("mode", newMode);
         localStorage.setItem("mode", newMode);
       });
 
-      EventBus.$on("save-file", options => {
+      EventBus.$on("save-file", (options) => {
         let blob = new Blob([this.cmEditor.getValue()], {
-          type: "text/plain;charset=utf-8"
+          type: "text/plain;charset=utf-8",
         });
         FileSaver.saveAs(blob, `file.${options.mode.fileExtension}`);
       });
 
-      EventBus.$on("file-loaded", contents => {
+      EventBus.$on("file-loaded", (contents) => {
         this.cmEditor.setValue(contents);
       });
 
@@ -148,7 +148,7 @@ export default {
         this.cmEditor.setValue(savedContent);
       }
 
-      EventBus.$on("compress-contents", modeName => {
+      EventBus.$on("compress-contents", (modeName) => {
         let contents = this.cmEditor.getValue();
         let minifiedContents;
         try {
@@ -164,12 +164,12 @@ export default {
             text: `Error minifying ${modeName}, please check your syntax!`,
             timeout: 1200,
             type: "error",
-            theme: "mint"
+            theme: "mint",
           }).show();
         }
       });
 
-      EventBus.$on("expand-contents", modeName => {
+      EventBus.$on("expand-contents", (modeName) => {
         let contents = this.cmEditor.getValue();
         let prettyContents;
         try {
@@ -185,7 +185,7 @@ export default {
             text: `Error formatting ${modeName}, please check your syntax!`,
             timeout: 1200,
             type: "error",
-            theme: "mint"
+            theme: "mint",
           }).show();
         }
       });
@@ -194,7 +194,7 @@ export default {
         localStorage.setItem("main-editor-content", this.cmEditor.getValue());
       };
     }
-  }
+  },
 };
 </script>
 

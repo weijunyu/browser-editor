@@ -9,8 +9,8 @@ import BrowserEditor from "./components/BrowserEditor.vue";
 export default {
   name: "app",
   components: {
-    BrowserEditor
-  }
+    BrowserEditor,
+  },
 };
 </script>
 
