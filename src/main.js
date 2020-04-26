@@ -11,6 +11,7 @@ import "@fortawesome/fontawesome-free/css/brands.min.css";
 // Main import + modes
 import "codemirror/mode/dockerfile/dockerfile";
 import "codemirror/mode/javascript/javascript"; // also for json & typescript
+import "codemirror/mode/css/css";
 import "codemirror/mode/python/python";
 import "codemirror/mode/shell/shell";
 import "codemirror/mode/sql/sql";

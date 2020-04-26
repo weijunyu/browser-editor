@@ -7,6 +7,12 @@ export default {
       mode: "text/html",
       icon: "fab fa-html5",
     },
+    {
+      fileExtension: "css",
+      name: "css",
+      mode: "text/css",
+      icon: "fab fa-css3-alt"
+    },
     { fileExtension: "xml", name: "xml", mode: "xml", icon: "fas fa-code" },
     {
       fileExtension: "js",
