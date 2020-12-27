@@ -6,7 +6,7 @@
       <!-- Modes -->
       <div v-if="menus.modes" class="menu" id="modes-menu">
         <ul>
-          <li v-for="(mode, index) in allModes" :key="index">
+          <li v-for="mode of allModes" :key="mode.name">
             <a
               @click="setMode(mode)"
               :class="{ active: isModeActive(mode.name) }"
@@ -22,7 +22,7 @@
       <!-- Themes -->
       <div v-if="menus.themes" class="menu" id="themes-menu">
         <ul>
-          <li v-for="(theme, index) in allThemes" :key="index">
+          <li v-for="(theme, index) of allThemes" :key="theme">
             <a
               @click="setTheme(theme)"
               :class="{ active: isThemeActive(theme) }"
@@ -217,7 +217,7 @@ export default {
     }
 
     // Main Editor initial settings
-    let initialTheme = savedTheme || "darcula";
+    let initialTheme = savedTheme || config.defaultTheme;
 
     let initialMode = config.modes[0]; // name of mode is 'text', using 'null' for codemirror mode.
     if (savedMode) {
