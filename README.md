@@ -1,7 +1,5 @@
 # browser-editor
 
-[![Build Status](https://travis-ci.org/weijunyu/browser-editor.svg?branch=master)](https://travis-ci.org/weijunyu/browser-editor)
-
 Purely in-browser text editor, built with [CodeMirror](https://codemirror.net/) and [Vue.js](https://vuejs.org).
 
 Served as 1 single html file and run locally on a modern browser. Simply Ctrl/Cmd + S this page as an HTML file, and use it anywhere!
