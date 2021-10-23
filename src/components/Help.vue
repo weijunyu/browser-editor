@@ -1,9 +1,10 @@
 <template>
   <div class="help-content">
-    <div v-html="readmeHtmlString"></div>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div v-html="readmeHtmlString" />
     <footer>
       <a :href="packageInfo.repository.url">
-        <i class="fab fa-github"></i>
+        <i class="fab fa-github" />
         v{{ packageInfo.version }}
       </a>
     </footer>

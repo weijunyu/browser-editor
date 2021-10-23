@@ -10,8 +10,10 @@
   "license": "MIT",
   "scripts": {
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "serve": "vue-cli-service serve"
+    "serve": "vue-cli-service serve",
+    "vue": "vue-cli-service",
+    "lint": "eslint --ext .vue,.js src",
+    "lint:fix": "eslint --fix --ext .vue,.js src"
   },
   "browserslist": [
     "> 1%",

@@ -4,76 +4,109 @@
     <div class="content">
       <!-- Flex. Order matters! Place all menu/settings before main editor. -->
       <!-- Modes -->
-      <div v-if="menus.modes" class="menu" id="modes-menu">
+      <div
+        v-if="menus.modes"
+        id="modes-menu"
+        class="menu"
+      >
         <ul>
-          <li v-for="mode of allModes" :key="mode.name">
+          <li
+            v-for="mode of allModes"
+            :key="mode.name"
+          >
             <a
-              @click="setMode(mode)"
               :class="{ active: isModeActive(mode.name) }"
+              @click="setMode(mode)"
             >
               {{ mode.name }}
               <div class="menu-icon">
-                <i :class="mode.icon"></i>
+                <i :class="mode.icon" />
               </div>
             </a>
           </li>
         </ul>
       </div>
       <!-- Themes -->
-      <div v-if="menus.themes" class="menu" id="themes-menu">
+      <div
+        v-if="menus.themes"
+        id="themes-menu"
+        class="menu"
+      >
         <ul>
-          <li v-for="(theme, index) of allThemes" :key="theme">
+          <li
+            v-for="(theme, index) of allThemes"
+            :key="theme"
+          >
             <a
-              @click="setTheme(theme)"
               :class="{ active: isThemeActive(theme) }"
+              @click="setTheme(theme)"
             >
               {{ theme }}
               <div class="menu-icon">
-                <i class="fas fa-sun" v-if="0 <= index && index < 4"></i>
-                <i class="fas fa-moon" v-if="4 <= index && index < 8"></i>
+                <i
+                  v-if="0 <= index && index < 4"
+                  class="fas fa-sun"
+                />
+                <i
+                  v-if="4 <= index && index < 8"
+                  class="fas fa-moon"
+                />
               </div>
             </a>
           </li>
         </ul>
       </div>
       <!-- Settings: default -->
-      <div class="editor-wrapper" v-if="menus.settings">
-        <p class="editor-name" id="editor-default-settings-name">
+      <div
+        v-if="menus.settings"
+        class="editor-wrapper"
+      >
+        <p
+          id="editor-default-settings-name"
+          class="editor-name"
+        >
           Default settings
         </p>
         <Editor
-          editorId="editor-default-settings"
-          editorName="Default settings"
-          v-bind:initialValue="getDefaultSettingsString()"
-          v-bind:codeMirrorOptions="cmOptionsDefaultSettings"
-        ></Editor>
+          editor-id="editor-default-settings"
+          editor-name="Default settings"
+          :initial-value="getDefaultSettingsString()"
+          :code-mirror-options="cmOptionsDefaultSettings"
+        />
       </div>
       <!-- Settings: current -->
-      <div class="editor-wrapper" v-if="menus.settings">
+      <div
+        v-if="menus.settings"
+        class="editor-wrapper"
+      >
         <p
-          class="editor-name"
           id="editor-current-settings-name"
+          class="editor-name"
           :style="currentSettingsStyle"
         >
           Current settings
-          <button type="button" class="editor-button" @click="resetSettings">
+          <button
+            type="button"
+            class="editor-button"
+            @click="resetSettings"
+          >
             Reset
           </button>
         </p>
         <Editor
-          editorId="editor-current-settings"
-          editorName="Current Settings"
-          v-bind:codeMirrorOptions="cmOptionsCurrentSettings"
-        ></Editor>
+          editor-id="editor-current-settings"
+          editor-name="Current Settings"
+          :code-mirror-options="cmOptionsCurrentSettings"
+        />
       </div>
       <!-- Help -->
       <Help v-if="menus.help" />
       <!-- Main Editor -->
       <div class="editor-wrapper">
         <Editor
-          v-bind:codeMirrorOptions="cmOptionsMainEditor"
-          editorId="editor-main"
-        ></Editor>
+          :code-mirror-options="cmOptionsMainEditor"
+          editor-id="editor-main"
+        />
       </div>
     </div>
   </div>
@@ -91,7 +124,12 @@ import { EventBus, sortObject } from "../utils";
 import config from "../config";
 
 export default {
-  name: "browser-editor",
+  name: "BrowserEditor",
+  components: {
+    Editor,
+    Help,
+    Sidebar,
+  },
   data: function () {
     return {
       allThemes: [...config.themes.light, ...config.themes.dark],
@@ -99,59 +137,6 @@ export default {
       cmOptionsMainEditor: null,
       currentSettingsInvalid: false,
     };
-  },
-  components: {
-    Editor,
-    Help,
-    Sidebar,
-  },
-  methods: {
-    ...mapActions(["toggleMenu"]),
-    ...mapMutations({
-      setStoreMode: "setMode",
-      setStoreTheme: "setTheme",
-    }),
-    getDefaultSettingsString() {
-      let defaultConfigurables = {};
-      // Only configurable settings
-      for (let settingName of Object.keys(CodeMirror.defaults)) {
-        if (config.configurables.includes(settingName)) {
-          defaultConfigurables[settingName] = CodeMirror.defaults[settingName];
-        }
-      }
-      return JSON.stringify(sortObject(defaultConfigurables), null, 2);
-    },
-    isThemeActive(themeName) {
-      return this.theme === themeName;
-    },
-    isModeActive(modeName) {
-      return this.mode.name === modeName;
-    },
-    setTheme(themeName) {
-      this.setStoreTheme(themeName);
-      // Use event for main editor to set theme on demand
-      EventBus.$emit("set-theme", themeName);
-      this.toggleMenu("themes");
-    },
-    setMode(mode) {
-      this.setStoreMode(mode);
-      // Event used by main editor to set mode
-      EventBus.$emit("set-mode", mode.mode);
-      this.toggleMenu("modes");
-    },
-    resetSettings() {
-      let originalSettingsNames = Object.keys(this.cmOptionsMainEditor).filter(
-        (settingName) => {
-          return config.configurables.includes(settingName);
-        }
-      );
-      let originalSettings = {};
-      for (let settingName of originalSettingsNames) {
-        originalSettings[settingName] = cmOptionsMainEditor[settingName];
-      }
-      EventBus.$emit("current-settings", originalSettings); // Update current-settings editor
-      EventBus.$emit("new-settings-available", originalSettings); // Update main-editor
-    },
   },
   computed: {
     ...mapState({
@@ -266,6 +251,54 @@ export default {
       content: config.strings.prettyFormatXmlAndJsonTooltip,
       placement: "right",
     });
+  },
+    methods: {
+    ...mapActions(["toggleMenu"]),
+    ...mapMutations({
+      setStoreMode: "setMode",
+      setStoreTheme: "setTheme",
+    }),
+    getDefaultSettingsString() {
+      let defaultConfigurables = {};
+      // Only configurable settings
+      for (let settingName of Object.keys(CodeMirror.defaults)) {
+        if (config.configurables.includes(settingName)) {
+          defaultConfigurables[settingName] = CodeMirror.defaults[settingName];
+        }
+      }
+      return JSON.stringify(sortObject(defaultConfigurables), null, 2);
+    },
+    isThemeActive(themeName) {
+      return this.theme === themeName;
+    },
+    isModeActive(modeName) {
+      return this.mode.name === modeName;
+    },
+    setTheme(themeName) {
+      this.setStoreTheme(themeName);
+      // Use event for main editor to set theme on demand
+      EventBus.$emit("set-theme", themeName);
+      this.toggleMenu("themes");
+    },
+    setMode(mode) {
+      this.setStoreMode(mode);
+      // Event used by main editor to set mode
+      EventBus.$emit("set-mode", mode.mode);
+      this.toggleMenu("modes");
+    },
+    resetSettings() {
+      let originalSettingsNames = Object.keys(this.cmOptionsMainEditor).filter(
+        (settingName) => {
+          return config.configurables.includes(settingName);
+        }
+      );
+      let originalSettings = {};
+      for (let settingName of originalSettingsNames) {
+        originalSettings[settingName] = cmOptionsMainEditor[settingName];
+      }
+      EventBus.$emit("current-settings", originalSettings); // Update current-settings editor
+      EventBus.$emit("new-settings-available", originalSettings); // Update main-editor
+    },
   },
 };
 </script>

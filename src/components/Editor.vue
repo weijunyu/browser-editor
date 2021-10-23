@@ -1,6 +1,6 @@
 <template>
-  <div v-bind:id="editorId + '-wrapper'">
-    <textarea v-bind:id="editorId"></textarea>
+  <div :id="editorId + '-wrapper'">
+    <textarea :id="editorId" />
   </div>
 </template>
 
@@ -16,12 +16,30 @@ import { EventBus, sortObject } from "../utils";
 import config from "../config";
 
 export default {
-  name: "cm-editor",
-  props: ["codeMirrorOptions", "editorId", "editorName", "initialValue"],
-  data: function () {
+  name: "CmEditor",
+  props: {
+    codeMirrorOptions: {
+      type: Object,
+      default: function() {
+        return {};
+      },
+    },
+    editorId: {
+      type: String,
+      default: "",
+    },
+    editorName: {
+      type: String,
+      default: "",
+    },
+    initialValue: {
+      type: String,
+      default: "",
+    },
+  },
+  data: function() {
     return {};
   },
-  methods: {},
   mounted() {
     this.cmEditor = CodeMirror.fromTextArea(
       document.getElementById(this.editorId),

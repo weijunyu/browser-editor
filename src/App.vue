@@ -7,7 +7,7 @@
 <script>
 import BrowserEditor from "./components/BrowserEditor.vue";
 export default {
-  name: "app",
+  name: "App",
   components: {
     BrowserEditor,
   },

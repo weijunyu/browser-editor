@@ -1,30 +1,45 @@
 <template>
-  <nav class="sidebar" :style="sidebarStyle">
+  <nav
+    class="sidebar"
+    :style="sidebarStyle"
+  >
     <ul v-show="sidebar">
       <li>
         <!-- outer: a element is flex with justified content -->
-        <a @click="toggleMenu('modes')" :class="{ active: menus.modes }">
+        <a
+          :class="{ active: menus.modes }"
+          @click="toggleMenu('modes')"
+        >
           <!-- outer: div is left-aligned in parent a -->
           <div>
             <!-- inner: div contains centered icon -->
             <div>
-              <i class="fas fa-code"></i>
+              <i class="fas fa-code" />
             </div>
             <!-- inner: actual text -->
             mode
           </div>
           <div>
             <small>{{ mode.name }}</small>
-            <i class="fas fa-angle-right" v-show="!menus.modes && sidebar"></i>
-            <i class="fas fa-angle-left" v-show="menus.modes && sidebar"></i>
+            <i
+              v-show="!menus.modes && sidebar"
+              class="fas fa-angle-right"
+            />
+            <i
+              v-show="menus.modes && sidebar"
+              class="fas fa-angle-left"
+            />
           </div>
         </a>
       </li>
       <li>
-        <a @click="toggleMenu('themes')" :class="{ active: menus.themes }">
+        <a
+          :class="{ active: menus.themes }"
+          @click="toggleMenu('themes')"
+        >
           <div>
             <div>
-              <i class="fas fa-palette"></i>
+              <i class="fas fa-palette" />
             </div>
             theme
           </div>
@@ -32,47 +47,74 @@
             <small :style="{ width: '70px', textAlign: 'right' }">
               {{ theme }}
             </small>
-            <i class="fas fa-angle-right" v-show="!menus.themes && sidebar"></i>
-            <i class="fas fa-angle-left" v-show="menus.themes && sidebar"></i>
+            <i
+              v-show="!menus.themes && sidebar"
+              class="fas fa-angle-right"
+            />
+            <i
+              v-show="menus.themes && sidebar"
+              class="fas fa-angle-left"
+            />
           </div>
         </a>
       </li>
       <li>
-        <a @click="toggleMenu('settings')" :class="{ active: menus.settings }">
+        <a
+          :class="{ active: menus.settings }"
+          @click="toggleMenu('settings')"
+        >
           <div>
             <div>
-              <i class="fas fa-cogs"></i>
+              <i class="fas fa-cogs" />
             </div>
             settings
           </div>
-          <i class="fas fa-angle-right" v-show="!menus.settings && sidebar"></i>
-          <i class="fas fa-angle-left" v-show="menus.settings && sidebar"></i>
+          <i
+            v-show="!menus.settings && sidebar"
+            class="fas fa-angle-right"
+          />
+          <i
+            v-show="menus.settings && sidebar"
+            class="fas fa-angle-left"
+          />
         </a>
       </li>
       <li>
-        <a @click="toggleMenu('help')" :class="{ active: menus.help }">
+        <a
+          :class="{ active: menus.help }"
+          @click="toggleMenu('help')"
+        >
           <div>
             <div>
-              <i class="fas fa-info"></i>
+              <i class="fas fa-info" />
             </div>
             help
           </div>
-          <i class="fas fa-angle-right" v-show="!menus.help && sidebar"></i>
-          <i class="fas fa-angle-left" v-show="menus.help && sidebar"></i>
+          <i
+            v-show="!menus.help && sidebar"
+            class="fas fa-angle-right"
+          />
+          <i
+            v-show="menus.help && sidebar"
+            class="fas fa-angle-left"
+          />
         </a>
       </li>
       <li>
         <input
+          id="file-loader"
           type="file"
           name="file-loader"
-          id="file-loader"
           class="file-loader-hidden"
           @change="loadFile"
-        />
-        <label for="file-loader" class="file-loader-button menu-button">
+        >
+        <label
+          for="file-loader"
+          class="file-loader-button menu-button"
+        >
           <div>
             <div>
-              <i class="fas fa-file"></i>
+              <i class="fas fa-file" />
             </div>
             open file
           </div>
@@ -82,7 +124,7 @@
         <a @click="emitSaveFileEvent">
           <div>
             <div>
-              <i class="fas fa-save"></i>
+              <i class="fas fa-save" />
             </div>
             save file
           </div>
@@ -94,20 +136,20 @@
         <button
           type="button"
           class="sidebar-bottom-button"
-          @click="compressContents"
           :disabled="!isModeXmlOrJson"
+          @click="compressContents"
         >
-          <i class="fas fa-compress-arrows-alt"></i>
+          <i class="fas fa-compress-arrows-alt" />
         </button>
       </div>
       <div id="expand-contents-button">
         <button
           type="button"
           class="sidebar-bottom-button"
-          @click="expandContents"
           :disabled="!isModeXmlOrJson"
+          @click="expandContents"
         >
-          <i class="fas fa-expand-arrows-alt"></i>
+          <i class="fas fa-expand-arrows-alt" />
         </button>
       </div>
       <button
@@ -115,8 +157,14 @@
         type="button"
         @click="toggleSidebar"
       >
-        <i class="fas fa-angle-left" v-if="sidebar"></i>
-        <i class="fas fa-angle-right" v-if="!sidebar"></i>
+        <i
+          v-if="sidebar"
+          class="fas fa-angle-left"
+        />
+        <i
+          v-if="!sidebar"
+          class="fas fa-angle-right"
+        />
       </button>
     </div>
   </nav>
@@ -127,6 +175,28 @@ import { mapState, mapActions, mapMutations } from "vuex";
 import { EventBus } from "../utils";
 
 export default {
+  computed: {
+    ...mapState({
+      menus: (state) => state.browserEditor.menus,
+      sidebar: (state) => state.browserEditor.sidebar,
+      mode: (state) => state.browserEditor.mode,
+      theme: (state) => state.browserEditor.theme,
+    }),
+    sidebarStyle() {
+      if (this.sidebar) {
+        return {
+          "margin-left": 0,
+        };
+      }
+      return {
+        "margin-left": "-162px",
+        "flex-direction": "column-reverse",
+      };
+    },
+    isModeXmlOrJson() {
+      return this.mode.name === "xml" || this.mode.name === "json";
+    },
+  },
   methods: {
     ...mapActions(["toggleMenu", "toggleSidebar"]),
     ...mapMutations({
@@ -158,28 +228,6 @@ export default {
       if (this.mode.name === "xml" || this.mode.name === "json") {
         EventBus.$emit("expand-contents", this.mode.name);
       }
-    },
-  },
-  computed: {
-    ...mapState({
-      menus: (state) => state.browserEditor.menus,
-      sidebar: (state) => state.browserEditor.sidebar,
-      mode: (state) => state.browserEditor.mode,
-      theme: (state) => state.browserEditor.theme,
-    }),
-    sidebarStyle() {
-      if (this.sidebar) {
-        return {
-          "margin-left": 0,
-        };
-      }
-      return {
-        "margin-left": "-162px",
-        "flex-direction": "column-reverse",
-      };
-    },
-    isModeXmlOrJson() {
-      return this.mode.name === "xml" || this.mode.name === "json";
     },
   },
 };
