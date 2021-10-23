@@ -21,14 +21,18 @@
           </div>
           <div>
             <small>{{ mode.name }}</small>
-            <i
-              v-show="!menus.modes && sidebar"
-              class="fas fa-angle-right"
-            />
-            <i
-              v-show="menus.modes && sidebar"
-              class="fas fa-angle-left"
-            />
+            <transition name="slide-fade-left">
+              <i
+                v-show="!menus.modes && sidebar"
+                class="fas fa-angle-right"
+              />
+            </transition>
+            <transition name="slide-fade-right">
+              <i
+                v-show="menus.modes && sidebar"
+                class="fas fa-angle-left"
+              />
+            </transition>
           </div>
         </a>
       </li>
@@ -239,5 +243,21 @@ export default {
 }
 .sidebar ul > li > a div > small {
   margin-right: 0.2rem;
+}
+
+.slide-fade-left-enter, .slide-fade-left-leave-to {
+  transform: translateX(-10px);
+  opacity: 0;
+}
+.slide-fade-left-enter-active, .slide-fade-left-leave-active {
+  transition: all 0.2s;
+}
+
+.slide-fade-right-enter, .slide-fade-right-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+.slide-fade-right-enter-active, .slide-fade-right-leave-active {
+  transition: all 0.2s;
 }
 </style>
